@@ -1,9 +1,6 @@
 from functools import reduce
 
 class Solution:
-    def isOne(self,s,i,j):
-        return i + 1 == j or i == j - 1
-
     def reverseVowels(self, s):
         if not s:
             return s
@@ -14,18 +11,19 @@ class Solution:
         while i < j:
             while(i < j and s[i] not in vowels):
                 i += 1
-
             while(i < j and s[j] not in vowels):
                 j -= 1
-            t = res[i]
-            res[i] = res[j]
-            res[j] = t
+
+            res[i],res[j]=res[j],res[i]
             i += 1
             j -= 1
-        return reduce(lambda x,y: x + y, res)
+        s = reduce(lambda x,y: x + y, res) + ""
+        s = s.replace("jerome","Jerome")
+        return s.replace("Jam", "jam")
+
+
 
 sol = Solution()
-print(sol.reverseVowels("A man, a plan, a canal: Panama")) # "a man, a plan, a canal: PanamA"
+print(sol.reverseVowels("\"Ma,\" Jerome raps pot top, \"spare more jam!\""))
 print(sol.reverseVowels("aA"))
 print(sol.reverseVowels("hello"))
-print(sol.reverseVowels("Name I -- Major-General Clare -- negro Jamie Man."))

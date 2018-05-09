@@ -1,14 +1,19 @@
 class Solution:
     def repeatedStringMatch(self, A, B):
-        q = (len(B) - 1) // len(A) + 1
-        for i in range(2):
-            s = A*(q+i)
-            if B in s:
-                return q + i
+        sa = A
+        c = 1
+        while (len(sa)-len(B)) <= len(B):
+            if sa.find(B) != -1:
+                return c
+            sa += A
+            c += 1
+        if sa.find(B) != -1:
+            return c
         return -1
 
+
+
 sol = Solution()
-print(sol.repeatedStringMatch("abababaaba", "aabaaba"))
-print(sol.repeatedStringMatch("abcd", "cdabcdab"))
-
-
+print(sol.repeatedStringMatch("aabaa", "aaab")) # 2
+print(sol.repeatedStringMatch( "abcd", "cdabcdab"))
+print(sol.repeatedStringMatch("abcd", "abcdb"))

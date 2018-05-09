@@ -1,19 +1,18 @@
 class Solution:
     def findNthDigit(self, n):
-        count = 0
-        upper = 10
-        w = 1
-        for a in range(1, n + 1):
-            if a == upper:
-                upper *= 10
-                w += 1
-
-            count += w
-            if count >= n:
-                s = str(a)
-                return int(s[w - 1 - count + n])
+        len = 1
+        count = 9
+        start = 1
+        while n > len * count:
+            n -= len * count
+            len += 1
+            count *= 10
+            start *= 10
+        start += (n - 1) // len
+        s = str(start)
+        return s[(n - 1) % len]
 
 
 
 sol = Solution()
-print(sol.findNthDigit(1000000000))
+print(sol.findNthDigit(50))

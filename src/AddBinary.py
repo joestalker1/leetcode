@@ -45,3 +45,25 @@ print(sol.addBinary("100", "110010"))
 
 
 
+        res = ""
+        i = len(a) - 1
+        j = len(b) - 1
+        carry = 0
+        while i >= 0 or j >= 0:
+            sum = carry
+            if i >= 0:
+                sum += ord(a[i]) - ord('0')
+                i -= 1
+            if j >= 0:
+                sum += ord(b[j]) - ord('0')
+                j -= 1
+            res += chr((sum % 2) + ord('0'))
+            carry = sum // 2
+        if carry:
+            res += chr(carry + ord('0'))
+        return res[::-1]
+
+
+sol = Solution()
+print(sol.addBinary("11", "1"))
+print(sol.addBinary("100", "110010"))

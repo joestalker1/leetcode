@@ -1,21 +1,12 @@
 class Solution:
-    def reverseStr(self, s, k):
-        res = ''
-        i = 0
-        while i < len(s):
-            if i + k <= len(s) and i + 2 * k > len(s) or i + k > len(s):
-                sub = s[i:i + k]
-                res += sub[::-1]
-                if i + 2 * k > len(s):
-                    res += s[i + k:]
-                i = len(s)
-            else:
-                sub = s[i:i + k]
-                res += sub[::-1]
-                res += s[i + k:i + 2 * k]
-                i += 2 * k
+    def reverseString(self, s):
+        res = ' ' * len(s)
+        i = len(s) - 1
+        for ch in s:
+            res[i] = ch
+            i -= 1
         return res
 
-
 sol = Solution()
-print(sol.reverseStr("abcdefg", 2))
+print(sol.reverseString(""))
+print(sol.reverseString("hello"))
