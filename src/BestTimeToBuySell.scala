@@ -1,4 +1,3 @@
-package leetcode
 
 object SolutionApp extends App {
 
