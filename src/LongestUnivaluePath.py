@@ -6,46 +6,39 @@ class TreeNode:
 
 
 class Solution:
-    def cons_or_snoc(self, queue, node, cur_value):
-        if not node:
-            return
-        if node.val == cur_value:
-            queue.insert(0, node)
-        else:
-            queue.append(node)
-
     def longestUnivaluePath(self, root):
-        if not root:
-            return 0
-        queue = []
-        queue.append(root)
-        max_len = 1
-        cur_len = 1
-        cur_value = -1
-        while len(queue) > 0:
-            node = queue.pop(0)
-
-            if cur_value == node.val:
-                cur_len += 1
-            else:
-                if cur_len > max_len:
-                    max_len = cur_len
-                cur_value = node.val
-                cur_len = 1
+        self.ans = 0
 
 
-            if node.left and node.right and node.left.val == node.right.val:
-                queue.insert(0, node.right)
-                queue.insert(0, node.left)
-            else:
-                self.cons_or_snoc(queue, node.left, cur_value)
-                self.cons_or_snoc(queue, node.right, cur_value)
-
-
-        return (max_len - 1) if cur_len < max_len else (cur_len - 1)
+        def path_len(node):
+            if not node:
+                return 0
+            left_len = path_len(node.left)
+            right_len = path_len(node.right)
+            left_arrow = right_arrow = 0
+            if node.left and node.left.val == node.val:
+                left_arrow = left_len + 1
+            if node.right and node.right.val == node.val:
+                right_arrow = right_len + 1
+            self.ans = max(self.ans, left_arrow + right_arrow)
+            return max(left_arrow, right_arrow)
+        path_len(root)
+        return self.ans
 
 
 sol = Solution()
+root = TreeNode(26)
+root.left = TreeNode(26)
+root.left.left = TreeNode(26)
+root.right = TreeNode(26)
+root.right.left = TreeNode(26)
+root.right.right = TreeNode(26)
+print(sol.longestUnivaluePath(root))
+
+root = TreeNode(1)
+root.left = TreeNode(2)
+print(sol.longestUnivaluePath(root))
+
 root = TreeNode(5)
 root.left = TreeNode(4)
 root.right = TreeNode(5)
@@ -54,12 +47,12 @@ root.left.right = TreeNode(1)
 root.right.right = TreeNode(5)
 print(sol.longestUnivaluePath(root))
 
-root= TreeNode(1)
+root = TreeNode(1)
 root.left = TreeNode(1)
 root.right = TreeNode(1)
 print(sol.longestUnivaluePath(root))
 
-root= TreeNode(2)
+root = TreeNode(2)
 root.left = TreeNode(1)
 root.right = TreeNode(1)
 print(sol.longestUnivaluePath(root))
