@@ -5,54 +5,31 @@ class TreeNode:
         self.right = None
 
 class Solution:
-    def comp_val(self, root, a, b):
-        if not root:
-            return None
-        res = None
-        if root.val < a and root.val < b:
-            self.comp_val(root.right, a, b)
-        elif root.val > a and root.val > b:
-            self.comp_val(root.left, root.left, a, b)
-        else:
-            return root
-
-
-
-    def trace_path(self, root, a, path):
-        if not root:
-            return
-        path.append(root.val)
-        if a == root.val:
-            return
-        if root.val < a:
-            self.trace_path(root.right, a, path)
-        elif root.val > a:
-            self.trace_path(root.left, a, path)
-
-    def get_last_index_of_common_part(self, path1, path2):
-        i = 0
-        while i <len(min(path1, path2)):
-            if path1[i] != path2[i]:
-                return i - 1
-            i += 1
-        return i - 1
-
-
     def lowestCommonAncestor(self, root, p, q):
         if not root:
             return None
-        path1 = []
-        self.trace_path(root, p, path1)
-        path2 = []
-        self.trace_path(root, q, path2)
-        i = self.get_last_index_of_common_part(path1, path2)
-        return path1[i] if i > -1 else None
+        if p.val < root.val and q.val < root.val:
+            return self.lowestCommonAncestor(root.left, p, q)
+
+        if p.val > root.val and q.val > root.val:
+            return self.lowestCommonAncestor(root.right, p, q)
+        return root
 
 
 sol = Solution()
 root = TreeNode(2)
 root.left = TreeNode(1)
-print(sol.lowestCommonAncestor(root, 2, 1))
+print(sol.lowestCommonAncestor(root, root, root.left))
+root = TreeNode(6)
+root.left = TreeNode(2)
+root.right = TreeNode(8)
+root.right.left = TreeNode(7)
+root.right.right = TreeNode(9)
+root.left.left = TreeNode(0)
+root.left.right = TreeNode(4)
+root.left.right.left = TreeNode(3)
+root.left.right.right = TreeNode(5)
+print(sol.lowestCommonAncestor(root, 2, 4))
 
 
 
