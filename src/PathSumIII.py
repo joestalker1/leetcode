@@ -9,9 +9,10 @@ class Solution:
         if not root:
             return 0
         sum += root.val
+        count = 0
         if sum == target:
-            return 1
-        return self.find_path(root.left, target, sum) + self.find_path(root.right, target, sum)
+            count += 1
+        return count + self.find_path(root.left, target, sum) + self.find_path(root.right, target, sum)
 
     def pathSum(self, root, sum):
         if not root:
