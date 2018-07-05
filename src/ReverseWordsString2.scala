@@ -1,4 +1,4 @@
-object ReverseWordsStringII extends App {
+object ReverseWordsString2 extends App {
   private def reverseWord(str: Array[Char], from: Int, to: Int): Unit = {
     var i = from
     var j = to
