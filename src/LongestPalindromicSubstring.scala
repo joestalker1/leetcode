@@ -1,41 +1,54 @@
 package leetcode
 
 object LongestPalindromicSubstring extends App {
-  def longestPalindrome(s: String): String = {
-    var max1 = 0
-    var maxs = ""
-    for {i <- 0 to s.size - 2
-    } {
-      val s1 = longestPalindrome2(s, i, s.size - 1)
-      if (s1.size > max1) {
-          maxs = s1
-        }
-        max1 = max1 max s1.size
+  private def reverseStr(s:String):String = {
+    val sbf = new StringBuilder()
+    for(i <- s.length - 1 to 0 by -1){
+      sbf.append(s(i))
     }
-    maxs
+    sbf.result()
   }
 
-  def longestPalindrome2(s: String, from: Int, to: Int): String = {
-    if (to - from == 1) {
-      val s1 = s.substring(from, to + 1)
-      if (s1 == s1.reverse) s1
-      else ""
-    } else {
-      var max1 = 0
-      var maxs = ""
-      for (sz <- 1 to (to - from + 1)) {
-        val s1 = longestPalindrome2(s, from, from + sz)
-        if (s.size > max1) {
-          max1 = s.size
-          maxs = s1
+  private def extractPalyn(s: String, lcp: Array[Array[Int]], maxi :Int, maxj : Int): String = {
+    var i = maxi
+    var j = maxj
+    val sbf = new StringBuilder()
+    while(i >= 0 && j >= 0 && lcp(i)(j) != 0){
+      if(lcp(i)(j) != 0) {
+        sbf.append(s(i-1))
+        i -= 1
+        j -= 1
+      } else i = -1
+    }
+    sbf.result()
+  }
+
+  def longestPalindrome(s: String): String = {
+    if(s == null || s.isEmpty) s
+    else {
+      val rev = reverseStr(s)
+      val lcp = Array.fill(s.length + 1, s.length + 1)(0)
+      var maxLen = 0
+      var maxi = -1
+      var maxj = -1
+      for{i <- 0 to s.length
+          j <- 0 to rev.length
+      } {
+        if(i == 0 || j == 0) lcp(i)(j) = 0
+        else if(s(i-1) == rev(j-1)) {
+          lcp(i)(j) = lcp(i-1)(j-1) + 1
+          if(maxLen < lcp(i)(j)){
+            maxLen = lcp(i)(j)
+            maxi = i
+            maxj = j
+          }
         }
       }
-      maxs
+      extractPalyn(s, lcp, maxi, maxj)
     }
   }
 
-
-  println(longestPalindrome(""))
+  //println(longestPalindrome(""))
 
   println(longestPalindrome("babad"))
 
