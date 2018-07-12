@@ -192,8 +192,6 @@ object Task1_9 extends App {
 
   def isRotation(s1:String,s2:String):Boolean = {
     if(s1 == null || s2 == null || s1.isEmpty || s2.isEmpty) false
-    else{
-
-    }
+    else isSubstring(s1, s2 + s2)
   }
 }

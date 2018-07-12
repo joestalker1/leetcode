@@ -1,51 +1,43 @@
 package leetcode
 
 object LongestPalindromicSubstring extends App {
-  private def reverseStr(s:String):String = {
-    val sbf = new StringBuilder()
-    for(i <- s.length - 1 to 0 by -1){
-      sbf.append(s(i))
-    }
-    sbf.result()
-  }
 
-  private def extractPalyn(s: String, lcp: Array[Array[Int]], maxi :Int, maxj : Int): String = {
-    var i = maxi
-    var j = maxj
-    val sbf = new StringBuilder()
-    while(i >= 0 && j >= 0 && lcp(i)(j) != 0){
-      if(lcp(i)(j) != 0) {
-        sbf.append(s(i-1))
-        i -= 1
-        j -= 1
-      } else i = -1
-    }
-    sbf.result()
-  }
+  def longestPalindrome(str: String): String = {
+    var maxLength = 1
+    var start  = 0
+    val len = str.length
 
-  def longestPalindrome(s: String): String = {
-    if(s == null || s.isEmpty) s
-    else {
-      val rev = reverseStr(s)
-      val lcp = Array.fill(s.length + 1, s.length + 1)(0)
-      var maxLen = 0
-      var maxi = -1
-      var maxj = -1
-      for{i <- 0 to s.length
-          j <- 0 to rev.length
-      } {
-        if(i == 0 || j == 0) lcp(i)(j) = 0
-        else if(s(i-1) == rev(j-1)) {
-          lcp(i)(j) = lcp(i-1)(j-1) + 1
-          if(maxLen < lcp(i)(j)){
-            maxLen = lcp(i)(j)
-            maxi = i
-            maxj = j
-          }
+    var low = 0
+    var high = 0
+
+    // One by one consider every character as center
+    // point of even and length palindromes
+    var i = 1
+    while (i < len) { // Find the longest even length palindrome with
+      // center points as i-1 and i.
+      low = i - 1
+      high = i
+      while (low >= 0 && high < len && str(low)==str(high)) {
+        if (high - low + 1 > maxLength) {
+          start = low
+          maxLength = high - low + 1
         }
+        low -= 1
+        high += 1
       }
-      extractPalyn(s, lcp, maxi, maxj)
+      low = i - 1
+      high = i + 1
+      while (low >= 0 && high < len && str(low) == str(high)) {
+        if (high - low + 1 > maxLength) {
+          start = low
+          maxLength = high - low + 1
+        }
+        low -= 1
+        high += 1
+      }
+      i += 1
     }
+    str.substring(start, start + maxLength)
   }
 
   //println(longestPalindrome(""))
