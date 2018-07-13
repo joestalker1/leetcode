@@ -155,14 +155,15 @@ object Task1_7 extends App {
 }
 
 object Task1_8 extends App {
-  private def fillRow(matrix: Array[Array[Int]], i:Int): Set[Int] = {
+  private def fillRow(matrix: Array[Array[Int]], i: Int): Set[Int] = {
     var cols = Set.empty[Int]
-    for(j <- 0 to matrix(0).length - 1){
-      if(matrix(i)(j) == 0) cols = cols + j
+    for (j <- 0 to matrix(0).length - 1) {
+      if (matrix(i)(j) == 0) cols = cols + j
       else matrix(i)(j) = 0
     }
     cols
   }
+
   def zero(matrix: Array[Array[Int]]): Unit = {
     var i = 0
     var cols = Set.empty[Int]
@@ -185,13 +186,78 @@ object Task1_8 extends App {
 }
 
 object Task1_9 extends App {
-  def isSubstring(s1:String,s2:String):Boolean = {
-    if(s1 == null || s2 == null || s1.isEmpty || s2.isEmpty) false
+  private def isSubstring(s1: String, s2: String): Boolean = {
+    if (s1 == null || s2 == null || s1.isEmpty || s2.isEmpty) false
     else s1.indexOf(s2) != -1 || s2.indexOf(s1) != -1
   }
 
-  def isRotation(s1:String,s2:String):Boolean = {
-    if(s1 == null || s2 == null || s1.isEmpty || s2.isEmpty) false
-    else isSubstring(s1, s2 + s2)
+  def isRotation(s1: String, s2: String): Boolean = {
+    if (s1 == null || s2 == null || s1.isEmpty || s2.isEmpty) false
+    else isSubstring(s2 + s2, s1)
   }
+
+  println(isRotation("waterbottle", "rbottlewat"))
+}
+
+class MyHashTable(n: Int = 16) {
+
+  case class MyHashTableItem(key: Int, value: String)
+
+  private val buckets = Array.ofDim[List[MyHashTableItem]](n)
+  private var count: Int = 0
+
+  private def hash(key: Int): Int = key.hashCode() % n
+
+  def put(key: Int, value: String): Unit = {
+    val h = hash(key)
+    val item = MyHashTableItem(key, value)
+    if (buckets(h) == null) buckets(h) = item :: Nil
+    else buckets(h) = item :: buckets(h)
+    count += 1
+  }
+
+  def size(): Int = count
+
+  def isEmpty() = size() == 0
+
+  def get(key: Int): Option[String] = {
+    if (isEmpty()) None
+    else {
+      val h = hash(key)
+      Option(buckets(h)).flatMap(_.find(_.key == key)).map(_.value)
+    }
+  }
+
+  def empty(): Unit = {
+    for (i <- 0 to n - 1) buckets(i) = null
+    count = 0
+  }
+}
+
+object Task7_12 extends App {
+  val map = new MyHashTable()
+  map.put(10, "aaaaa")
+  map.put(12, "cccc")
+  println(map.get(10))
+  println(map.get(12))
+}
+
+object Task8_3 extends App {
+  def magicIndex(arr: Array[Int], lo: Int, hi: Int): Int = {
+    if (arr == null || arr.isEmpty) -1
+    else if (lo >= hi) if (arr(lo) == lo) lo else -1
+    else {
+      val mid = lo + (hi - lo) / 2
+      if (arr(mid) == mid) mid
+      else if (arr(mid) > mid) magicIndex(arr, mid + 1, hi)
+      else magicIndex(arr, lo, mid - 1)
+    }
+  }
+
+  val arr = Array(0, 1, 3, 3)
+  println(magicIndex(arr, 0, arr.length))
+}
+
+object Task10_9 extends App {
+    
 }
