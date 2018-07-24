@@ -259,5 +259,87 @@ object Task8_3 extends App {
 }
 
 object Task10_9 extends App {
-    
+  private def isAnagram(s1: String, s2: String): Boolean = {
+    var chars = Map.empty[Char, Int]
+    for (ch <- s1) {
+      val c = chars.getOrElse(ch, 0)
+      chars = chars + (ch -> (c + 1))
+    }
+    for (ch <- s2 if (ch != ' ')) {
+      val c = chars.get(ch)
+      if (c.isEmpty) return false
+      c.foreach { n =>
+        if (n - 1 < 0) return false
+        chars = chars + (ch -> (n - 1))
+      }
+    }
+    true
+  }
+
+  def sortAnagram(arr: Array[String]): Unit = {
+    if (arr == null || arr.isEmpty) ()
+    else {
+      var i = 0
+      while (i < arr.length - 1) {
+        var j = i + 1
+        var r = i + 1
+        while (j < arr.length) {
+          if (isAnagram(arr(i), arr(j))) {
+            val t = arr(j)
+            r += 1
+            arr(j) = arr(r)
+            arr(r) = t
+          }
+          j += 1
+        }
+        i = r + 1
+      }
+    }
+  }
+}
+
+object Test16_17 extends App {
+  def sumOfContiguesSeq(nums: Array[Int]): Int = {
+    if (nums == null || nums.isEmpty) 0
+    else {
+      var sum = 0
+      var maxSum = 0
+      for (l <- 0 to nums.length - 1) {
+        sum += nums(l)
+        if (sum < 0) {
+          sum = nums(l)
+        }
+        if (sum >= 0 && sum > maxSum) maxSum = sum
+      }
+      maxSum
+    }
+  }
+
+  println(sumOfContiguesSeq(Array(2, -8, 3, -2, 4, -10)))
+}
+
+object Task17_4 extends App {
+  def missingNumber(arr: Array[Int]): Int = {
+    if (arr == null || arr.isEmpty) -1
+    else {
+      var i = 0
+      var zero = true
+      while (i < arr.length - 1) {
+        if ((arr(i) & 0x1) == 1) {
+          if (zero) return arr(i) - 1
+          zero = true
+        } else {
+          if (!zero) return arr(i) - 1
+          zero = false
+        }
+        i += 1
+      }
+      -1
+    }
+  }
+  println(missingNumber(Array(0,1,3,4,5)))
+}
+
+object Task17_7 extends App {
+    def babyNames():Unit = ()
 }
