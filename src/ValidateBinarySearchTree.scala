@@ -24,8 +24,7 @@ object ValidateBinarySearchTree extends App {
   }
 }
 
-val tree = new TreeNode(2)
-tree.left = new TreeNode(1)
-tree.right = new TreeNode(3)
-println(isValidBST(tree))
-}
+//val tree = new TreeNode(2)
+//tree.left = new TreeNode(1)
+//tree.right = new TreeNode(3)
+//println(isValidBST(tree))
