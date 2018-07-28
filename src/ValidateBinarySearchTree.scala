@@ -1,3 +1,4 @@
+import scala.collection.mutable.{ArrayBuffer, ListBuffer}
 
 object ValidateBinarySearchTree extends App {
 
@@ -8,23 +9,27 @@ object ValidateBinarySearchTree extends App {
   }
 
   def isValidBST(root: TreeNode): Boolean = {
-    var hi = Int.MinValue
+    val nums = new ArrayBuffer[Int]()
     def isValid(node: TreeNode): Boolean = {
       if (node == null) true
       else {
-        val leftTree = isValid(node.left)
-        val leftRes = if (node.left != null) node.left.value < node.value else true
-        val rightRes = if (node.right != null) node.right.value > node.value else true
-        val inRange = if (hi != Int.MaxValue) node.value > hi else true
-        if (leftRes && rightRes && inRange) hi = hi max node.value
-        leftRes && rightRes && inRange && leftTree && isValid(node.right)
+        val left = isValid(node.left)
+        val isLess = if(nums.isEmpty) true else nums.last < node.value
+        nums += node.value
+        val right = isValid(node.right)
+        left && isLess && right
       }
     }
     isValid(root)
   }
+
+
+  val tree = new TreeNode(10)
+  tree.left = new TreeNode(5)
+  tree.right = new TreeNode(15)
+  tree.right.left = new TreeNode(14)
+  tree.right.right = new TreeNode(20)
+  println(isValidBST(tree))
+
 }
 
-//val tree = new TreeNode(2)
-//tree.left = new TreeNode(1)
-//tree.right = new TreeNode(3)
-//println(isValidBST(tree))

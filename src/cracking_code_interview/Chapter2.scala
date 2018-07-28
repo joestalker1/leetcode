@@ -1,8 +1,7 @@
 package cracking_code_interview
 
-class ListNode {
+class ListNode(var x: Int) {
   var next: ListNode = _
-  var x: Int = 0
 }
 
 object Task2_1 extends App {
@@ -26,14 +25,10 @@ object Task2_1 extends App {
     }
   }
 
-  val a = new ListNode()
-  a.x = 0
-  a.next = new ListNode()
-  a.next.x = 1
-  a.next.next = new ListNode()
-  a.next.next.x = 1
-  a.next.next.next = new ListNode()
-  a.next.next.next.x = 3
+  val a = new ListNode(0)
+  a.next = new ListNode(1)
+  a.next.next = new ListNode(1)
+  a.next.next.next = new ListNode(3)
   val b = removeDups(a)
   println(b)
 }
@@ -145,16 +140,24 @@ object Task2_8 extends App {
     if (list == null) false
     else {
       var head1 = list
-      var head2 = list.next
-      while (head1 != null || head2 != null || head1 != head2) {
+      var head2 = list.next.next
+      while (head1 != head2) {
+        println(s"head1 ${head1.x}")
+        println(s"head2 ${head2.x}")
         head1 = head1.next
         if (head2.next != null) head2 = head2.next.next
         else head2 = head2.next
       }
+      println(s"${head1.x}")
       head1 != null && head1 == head2
     }
   }
-//  val list1 = new ListNode(1)
-//  list2.next
+  val list1 = new ListNode(1)
+  list1.next = new ListNode(2)
+  list1.next.next = new ListNode(3)
+  list1.next.next.next = new ListNode(4)
+  list1.next.next.next.next = list1 //new ListNode(5)
+  //list1.next.next.next.next.next = list1
+  println(isLoop(list1))
 
 }
