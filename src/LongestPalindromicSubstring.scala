@@ -1,48 +1,56 @@
 package leetcode
 
 object LongestPalindromicSubstring extends App {
-
   def longestPalindrome(str: String): String = {
-    var maxLength = 1
-    var start  = 0
-    val len = str.length
-
-    var low = 0
-    var high = 0
-
-    // One by one consider every character as center
-    // point of even and length palindromes
-    var i = 1
-    while (i < len) { // Find the longest even length palindrome with
-      // center points as i-1 and i.
-      low = i - 1
-      high = i
-      while (low >= 0 && high < len && str(low)==str(high)) {
-        if (high - low + 1 > maxLength) {
-          start = low
-          maxLength = high - low + 1
+    if(str == null || str.isEmpty) null
+    else {
+      val dp = Array.fill(str.length)(Array.ofDim[Int](str.length))
+      var i1 = 0
+      var i2 = 0
+      var maxLen = 0
+      for(i <- 0 to str.length-1) dp(i)(i) = 1
+      for{len <- 2 to str.length
+          i <- 0 to str.length - len}{
+        val j = i + len - 1
+        if(str(i) == str(j) && len == 2) {
+          dp(i)(j) = 2
+          if(maxLen < dp(i)(j)) {
+            maxLen = dp(i)(j)
+            i1 = i
+            i2 = j
+          }
         }
-        low -= 1
-        high += 1
-      }
-      low = i - 1
-      high = i + 1
-      while (low >= 0 && high < len && str(low) == str(high)) {
-        if (high - low + 1 > maxLength) {
-          start = low
-          maxLength = high - low + 1
+        else
+        if(str(i) == str(j)) {
+          dp(i)(j) = 2 + dp(i+1)(j-1)
+          if(maxLen < dp(i)(j)) {
+            maxLen = dp(i)(j)
+            i1 = i
+            i2 = j
+          }
         }
-        low -= 1
-        high += 1
+        else {
+          val r1 = dp(i+1)(j)
+          val r2 = dp(i)(j-1)
+          if(maxLen < r1) {
+            maxLen = dp(i+1)(j)
+            i1 = i+1
+            i2 = j
+          } else if(maxLen < r2) {
+            maxLen = dp(i)(j-1)
+            i1 = i
+            i2 = j-1
+          }
+          dp(i)(j) = r1 max r2
+        }
       }
-      i += 1
+      str.substring(i1, i2+1)
     }
-    str.substring(start, start + maxLength)
   }
 
   //println(longestPalindrome(""))
 
-  println(longestPalindrome("babad"))
+  println(longestPalindrome("acad"))
 
   println(longestPalindrome("cbbd"))
 }

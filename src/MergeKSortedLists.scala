@@ -1,4 +1,4 @@
-object Solution extends App {
+object Solution12 extends App {
 
   class ListNode(var x: Int) {
     next = null
