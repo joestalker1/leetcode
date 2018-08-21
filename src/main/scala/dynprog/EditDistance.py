@@ -22,4 +22,4 @@ def editDistance(s1,s2):
     return edit[len(s1)][len(s2)]
 
 
-print(editDistance("catt", "carrt"))
+print(editDistance("cat", "cata"))

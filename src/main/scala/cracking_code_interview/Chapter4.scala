@@ -149,7 +149,57 @@ object Task4_6 extends App {
     last
   }
 }
-//26, 47, 60, 85, 125, 133
-object Task4_7 extends App {
+//10,16,28,36,46,70,80,96
+object Task4_8 extends App {
+   private def descendant(root: TreeNode,x: TreeNode):Boolean = {
+      if(root == null || x == null) false
+      else{
+         if(x.x > root.x) descendant(root.right, x)
+         else if(x.x < root.x) descendant(root.left, x)
+         else true //equality
+      }
+   }
+
+   def firstCommonAncestor(root: TreeNode, t1: TreeNode, t2: TreeNode):Option[TreeNode] = {
+       if(t1 == null && t2 == null) None
+       else if(t1 == null) Some(t2)
+       else if(t2 == null) Some(t1)
+       else {
+         val t1InLeft = descendant(root.left, t1)
+         val t2InRight = descendant(root.right, t2)
+         if(t1InLeft && t2InRight) return Some(root)
+         if(t1InLeft) firstCommonAncestor(root.left, t1, t2)
+         else firstCommonAncestor(root.right, t1, t2)
+       }
+   }
+}
+
+// 39, 48, 66, 82
+object Task4_9 extends App {
+  private def traverse(node:TreeNode):List[List[Int]] = {
+    if(node != null && node.left == null && node.right == null) {
+      List(List(node.x))
+    } else {
+      var leftList = traverse(node.left)
+      var rightList = traverse(node.right)
+      leftList = leftList.map(node.x :: _)
+      rightList = rightList.map(node.x :: _)
+      for{list1 <- leftList
+          list2 <- rightList
+      } yield (list1 ++ list2)
+    }
+  }
+
+   def bstSequence(node: TreeNode):List[List[Int]] = {
+      if(node == null) List.empty
+      else traverse(node)
+   }
+}
+
+//4,11,18,31,37
+object Task4_10 extends App {
+   def checkSubtree(t1:TreeNode, t2:TreeNode):Boolean = {
+
+   }
 
 }
