@@ -17,7 +17,7 @@ object Combinations extends App {
       }
    }
 
-   val arr = Array(1,2,3,4)
+   val arr = Array(1,2,3)
    val combinations = comb(arr)
-   combinations.foreach( l => println(l.mkString(",")))
+   combinations.filter(_.nonEmpty).foreach( l => println(l.mkString(",")))
 }
