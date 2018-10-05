@@ -26,9 +26,6 @@ class Solution:
         self.gen(0, candidates, target, res, [])
         return res
 
-        #[print(list) for list in res]
-
-
 sol = Solution()
-sol.combinationSum([2,3,5], 8)
-sol.combinationSum([2,3,6,7], 7)
+print(sol.combinationSum([2,3,5], 8))
+#print(sol.combinationSum([2,3,6,7], 7))
