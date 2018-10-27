@@ -8,6 +8,8 @@ class ListNode1(var _x: Int = 0) {
 
 
 trait MergeLists {
+  val m = Map.empty[String, String]
+
   def mergeTwoLists(l1: ListNode1, l2: ListNode1): ListNode1 = {
      if(l1 == null && l2 == null) null
      else if(l1 != null && l2 == null) l1
