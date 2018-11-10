@@ -1,32 +1,22 @@
 class HitCounter {
   private val elapsedPeriod = 300
-
-  /** Initialize your data structure here. */
-  private var buffer = Array.ofDim[Int](32)
-  private var size  = 0
+  private val times = Array.ofDim[Int](elapsedPeriod)
+  private val hits = Array.ofDim[Int](elapsedPeriod)
 
   /** Record a hit.
         @param timestamp - The current timestamp (in seconds granularity). */
   def hit(timestamp: Int) {
-     size += 1
-     if(size == buffer.length) {
-       val old = buffer
-       buffer = Array.ofDim[Int](buffer.size * 2)
-       old.copyToArray(buffer)
-     }
-     buffer(size - 1) = timestamp
+    val index = timestamp % elapsedPeriod
+    if(times(index) != timestamp){
+      times(index) = timestamp
+      hits(index) = 1
+    } else hits(index) += 1
   }
 
   /** Return the number of hits in the past 5 minutes.
         @param timestamp - The current timestamp (in seconds granularity). */
   def getHits(timestamp: Int): Int = {
-     val start = timestamp - elapsedPeriod
-     if(start <= 0) buffer.size
-     else {
-        var i = 0
-        while(i < buffer.size && buffer(i) <= start) i += 1
-        buffer.size - i
-     }
+    times.zip(hits).filter(th => timestamp - th._1 < elapsedPeriod).map(_._2).sum
   }
 }
 
