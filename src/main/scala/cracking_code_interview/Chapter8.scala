@@ -154,3 +154,11 @@ object Task_8_11 extends App {
 
   println(ways(35))
 }
+//155,194,214,260,322,368,378
+object Task8_13 extends App {
+
+}
+//148,168,197,305,327
+object Task8_14 extends App {
+
+}
