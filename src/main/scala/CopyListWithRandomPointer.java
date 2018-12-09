@@ -7,24 +7,39 @@ class RandomListNode {
 };
 
 public class CopyListWithRandomPointer {
-    public static RandomListNode copyRandomList(RandomListNode head) {
+    private HashMap<RandomListNode, RandomListNode> visited = new HashMap<>();
+
+    private RandomListNode getOrClone(RandomListNode p){
+        if(p == null) return null;
+        if(!visited.containsKey(p)) {
+            RandomListNode newNode = new RandomListNode(p.label);
+            visited.put(p, newNode);
+            return newNode;
+        }
+        return visited.get(p);
+    }
+
+    public RandomListNode copyRandomList(RandomListNode head) {
         if(head == null) return head;
         RandomListNode newHead = null;
         RandomListNode prev = null;
-        HashMap<RandomListNode,RandomListNode> m = new HashMap<>();
         for(RandomListNode p = head;p != null; p = p.next) {
-           RandomListNode node = new RandomListNode(p.label);
-           m.put(p, node);
-           if(prev != null) prev.next = node;
-           else newHead = node;
+           RandomListNode node = getOrClone(p);
+           if(newHead == null) newHead = node;
+           else prev.next = node;
+           node.random = getOrClone(p.random);
            prev = node;
-        }
-        RandomListNode p1 = newHead;
-        for(RandomListNode p = head;p != null; p = p.next) {
-            p1.random = m.get(p.random);
         }
         return newHead;
     }
 
-    public static
+    public static void main(String ... args) {
+        CopyListWithRandomPointer cpm = new CopyListWithRandomPointer();
+         RandomListNode n1 = new RandomListNode(1);
+         n1.next = new RandomListNode(2);
+         n1.next.next = new RandomListNode(2);
+         n1.next.next.next = new RandomListNode(2);
+         RandomListNode n2 = cpm.copyRandomList(n1);
+         System.out.println(n2);
+    }
 }
