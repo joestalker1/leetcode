@@ -1,12 +1,13 @@
 
-case class Interval(var _start: Int = 0, var _end: Int = 0) {
-  var start: Int = _start
-  var end: Int = _end
-}
 
 import scala.collection.mutable.ListBuffer
 
 object MergeIntervals extends App {
+  case class Interval(var _start: Int = 0, var _end: Int = 0) {
+    var start: Int = _start
+    var end: Int = _end
+  }
+
   def merge(intervals: List[Interval]): List[Interval] = {
     if(intervals == null || intervals.length < 1) intervals
     else {
