@@ -1,5 +1,7 @@
 package cracking_code_interview
 
+import scala.collection.mutable.ListBuffer
+
 object Task10_1 extends App {
   def sort(a:Array[Int], b:Array[Int]):Array[Int] = {
      if(a.length > b.length) Array.empty[Int]
@@ -112,6 +114,30 @@ class MyBitSet() {
      else (buf(i) & ( 1 << (a % 64))) != 0
   }
 }
+
 object Task10_8 extends App {
+  def findDuplicate(nums:Array[Int]):List[Int] = {
+     val bitSet = new MyBitSet()
+     val dups = new ListBuffer[Int]()
+     for(a <- nums){
+       if(bitSet.has(a)) dups += a
+       else bitSet += a
+     }
+     dups.toList
+  }
+
+  println(findDuplicate(Array(1,2,3,1,2)).mkString(","))
+}
+//193, 211, 229, 251, 266, 279, 288, 291, 303, 317,330
+object Task10_9_1 extends App {
+
+}
+//301, 376, 392
+object Task10_10 extends App {
+   def rankFromStream():Unit = () // use search binary tree
+}
+
+//196,219,231,253,277,292,316
+object Task10_11 extends App {
 
 }
