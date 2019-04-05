@@ -2,10 +2,28 @@ class Solution:
     def removeStones(self, stones):
         if not stones:
             return 0
-        rows = {}
-        cols = {}
-        for i in range(len(stones)):
-            i1,j1 = stones[i]
+        m = {}
+        seen = set()
+        id = 0
+        for i in range(len(stones) - 1):
+            if i in seen:
+                continue
+            x,y = stones[i]
+            for j in range(i + 1, len(stones)):
+                if j in seen:
+                    continue
+                if x == stones[j][0] or y == stones[j][1]:
+                    if id not in m:
+                        m[id] = set()
+                        m[id].add(i)
+                        seen.add(i)
+                    m[id].add(j)
+                    seen.add(j)
+            id += 1
+        m.
+
+
+
             if i1 not in rows:
                 rows[i1] = set()
             if j1 not in cols:
