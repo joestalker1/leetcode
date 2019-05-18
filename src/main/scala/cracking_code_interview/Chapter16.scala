@@ -49,8 +49,8 @@ object Task16_5 extends App {
   println(trailingZero(10))
 }
 //632,670,679
-object Task16_6 extends App {
-   def smallDif(arr1:Array[Int],arr2:Array[Int]):(Int,Int) = {
-
-   }
-}
+//object Task16_6 extends App {
+//   def smallDif(arr1:Array[Int],arr2:Array[Int]):(Int,Int) = {
+//
+//   }
+//}
