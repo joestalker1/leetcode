@@ -1,27 +1,34 @@
-import scala.collection.mutable
-
 class MinStack() {
 
-  /** initialize your data structure here. */
-  private var stack: List[Int] = Nil
-  private var minStack:List[Int] = Nil
+  private var stack: List[Long] = Nil
+  private var min: Long = 0l
 
   def push(x: Int) {
-     stack = x :: stack
-     if(minStack.isEmpty || minStack.head >= x) minStack = x :: minStack
+     if(stack.isEmpty){
+       stack = x :: stack
+       min = x
+     } else if(x < min){
+       val y = 2 * x - min
+       stack = y :: stack
+       min = x
+     } else stack = x :: stack
   }
 
   def pop() {
-     val x = stack.head
-     stack = stack.tail
-     if(minStack.head == x) minStack = minStack.tail
+     if(stack.nonEmpty){
+       val x = stack.head
+       if(x < min) {
+         val newMin = 2* min - x
+         min = newMin
+       }
+     }
   }
 
   def top(): Int = {
-     stack.head
+     stack.head.toInt
   }
 
   def getMin(): Int = {
-     minStack.head
+     min.toInt
   }
 }
