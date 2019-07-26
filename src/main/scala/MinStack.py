@@ -23,7 +23,9 @@ class MinStack:
 
 
     def top(self):
-        return self.stack[len(self.stack) - 1] if len(self.stack) > 0 else None
+        if self.stack[len(self.stack) - 1] < self.min_val:
+            return self.min_val
+        return self.stack[len(self.stack) - 1]
 
     def getMin(self):
         if len(self.stack) == 0:
@@ -32,12 +34,33 @@ class MinStack:
 
 
 minStack = MinStack()
-minStack.push(-2)
-minStack.push(-3)
-minStack.push(0)
+
+#["MinStack","push","push","push","top","pop", "getMin", "pop"  ,"getMin",  "pop",  "push",  "top",  "getMin",  "push",  "top","getMin","pop","getMin"]
+#[[],[2147483646],[2147483646],[2147483647],[],[],[],[],[],[],[2147483647],[],[],[-2147483648],[],[],[],[]]
+
+minStack.push(2147483646)
+minStack.push(2147483646)
+minStack.push(2147483647)
+
+print(minStack.top())
+
+minStack.pop()
 
 print(minStack.getMin())
+
 minStack.pop()
+
 print(minStack.getMin())
+
+minStack.pop()
+
+minStack.push(2147483647)
+print(minStack.top())
+print(minStack.getMin())
+
+minStack.push(-2147483648)
+print(minStack.top())
+print(minStack.getMin())
+
 minStack.pop()
 print(minStack.getMin())

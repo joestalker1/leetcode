@@ -12,12 +12,10 @@ class Solution:
             elif s[i] == '{':
                 stack.append('}')
             else:
+                if len(stack) == 0:
+                    return False
                 ch = stack.pop()
                 if s[i] != ch:
                     return False
             i += 1
-        return True
-
-sol = Solution()
-print(sol.isValid("()[]{}"))
-print(sol.isValid("([)]"))
+        return len(stack) == 0
