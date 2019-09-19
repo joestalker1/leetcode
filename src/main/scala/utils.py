@@ -1,4 +1,5 @@
-# Definition for a binary tree node.
+import json
+
 class TreeNode:
     def __init__(self, x):
         self.val = x
@@ -32,4 +33,45 @@ def arrayToTreeNode(inputValues):
             nodeQueue.append(node.right)
     return root
 
+#list
+class ListNode:
+    def __init__(self, x):
+        self.val = x
+        self.next = None
+
+#API
+def arrayToListNode(numbers):
+
+    # Now convert that list into linked list
+    dummyRoot = ListNode(0)
+    ptr = dummyRoot
+    for number in numbers:
+        ptr.next = ListNode(number)
+        ptr = ptr.next
+
+    ptr = dummyRoot.next
+    return ptr
+
+def listNodeToArray(nodes):
+    if not nodes:
+        return []
+    p = nodes
+    arr = []
+    while p:
+        arr.append(p.val)
+        p = p.next
+    return arr
+
+def stringToIntegerList(input):
+    return json.loads(input)
+
+def listNodeToString(node):
+    if not node:
+        return "[]"
+
+    result = ""
+    while node:
+        result += str(node.val) + ", "
+        node = node.next
+    return "[" + result[:-2] + "]"
 
