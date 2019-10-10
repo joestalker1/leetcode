@@ -115,6 +115,7 @@ class Graph:
                 self.dfs(i, visited, stack)
 
         # Push current vertex to stack which stores result
+        # most closest vertex will be closest
         stack.insert(0, v)
 
         # The function to do Topological Sort. It uses recursive
@@ -128,7 +129,7 @@ class Graph:
         # Call the recursive helper function to store Topological
         # Sort starting from all vertices one by one
         for i in range(self.V):
-            if visited[i] == False:
+            if not visited[i]:
                 self.dfs(i, visited, stack)
 
                 # Print contents of the stack
