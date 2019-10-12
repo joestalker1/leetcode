@@ -3,7 +3,7 @@ import math
 class SegmentTree:
     def __init__(self, n):
         sz = 2 * (2 ** math.log(n) + 1)
-        self.seg_tree = [0] * sz
+        self.seg_tree = [0] * int(sz)
 
     def build(self, code, arr, node, b, e):
         if b == e:
@@ -31,8 +31,29 @@ class SegmentTree:
 
     def query(self, code, arr, node, b, e, i, j):
         if i > e or j < b:
-            return -1#; // if the current interval does not intersect query interval
+            return -1 #; // if the current interval does not intersect query interval
         if b >= i and e <= j:
-            return self.seg_tree[node];
+            return self.seg_tree[node]
+
+        p1 = self.query(code, arr, 2 * node, b, (b + e) // 2, i, j)
+        p2 = self.query(code, arr, 2 * node + 1, (b + e) // 2 + 1, e, i, j)
+        if p1 == -1:
+            return p2
+        if p2 == -1:
+            return p1;
+
+        if code == 0:
+            return p1 + p2;
+        if code == 1:
+            return arr[p1] <= arr[p2] if p1 != 0 else p2
+        return arr[p1] >= arr[p2] if p1 != 0 else p2
+
+
+arr = [8, 7, 3, 9, 5, 1, 10]
+seg_tree = SegmentTree(len(arr))
+seg_tree.build(1, arr, 1, 0, 6)
+print(seg_tree.query(1, arr, 1, 0, 6, 1, 3))
+
+
         
 
