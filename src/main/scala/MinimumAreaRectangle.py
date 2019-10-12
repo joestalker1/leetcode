@@ -1,14 +1,29 @@
+from collections import defaultdict
+
 class Solution(object):
     def minAreaRect(self, points):
-        S = set(map(tuple, points))
-        ans = float('inf')
-        for j, p2 in enumerate(points):
-            for i in xrange(j):
-                p1 = points[i]
-                if (p1[0] != p2[0] and p1[1] != p2[1] and
-                        (p1[0], p2[1]) in S and (p2[0], p1[1]) in S):
-                    ans = min(ans, abs(p2[0] - p1[0]) * abs(p2[1] - p1[1]))
-        return ans if ans < float('inf') else 0
+        if not points:
+            return 0
+        columns = defaultdict(list)
+        for x,y in points:
+            columns[x].append(y)
+        min_area = float('inf')
+        last_x = {}
+        list_x = sorted(columns)
+        for x in list_x:
+            column = columns[x]
+            column.sort()
+            for j,y2 in enumerate(column):
+                for i in range(j):
+                    y1 = column[i]
+                    if (y1, y2) in last_x:
+                        min_area = min(min_area, abs(x - last_x[y1, y2]) * abs(y2 - y1))
+                    last_x[y1, y2] = x
+        return min_area if min_area < float('inf') else 0
+
+
+
+
 
 
 sol = Solution()
