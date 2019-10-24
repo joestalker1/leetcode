@@ -24,14 +24,17 @@ class UnionFind:
 
 
 def kruskal(edges):
+    #sort edges by weight
     edges = sorted(edges, key = lambda x: x[2])
+    #declate union-find
     uf = UnionFind(len(edges) * 2)
     for edge in edges:
         n1, n2, w = edge
+        #add edge to spanning tree
         if not uf.same(n1, n2):
             uf.unite(n1, n2)
 
 
-
+#(from, to, weight)
 edges = [(1, 3, 2), (1, 5, 5), (2, 5, 3), (2, 6, 5), (3, 9, 4), (3, 3, 6), (4, 7, 6), (5, 2, 6)]
 kruskal(edges)

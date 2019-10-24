@@ -11,7 +11,7 @@ object Permutations extends App {
     if(buf.size == s.length) res += buf
     else {
       for(i <- 0 to s.length - 1) {
-        if(!chosen(i)){
+        if(!chosen(i)) {
           val perm = buf :+ s(i)
           chosen(i) = true
           generate(s, chosen, res, perm)
