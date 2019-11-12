@@ -1,6 +1,7 @@
 def bellmanFord(adj):
     dist = [float("inf")] * len(adj)
     dist[1] = 0
+    # relax all edges V times
     for u in range(1, len(adj)):
         for arr in adj[u]:
             b = arr[0]
