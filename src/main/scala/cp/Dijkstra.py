@@ -11,7 +11,7 @@ def dijkstra(adj):
             continue
         processed[a] = True
         for u in adj[a]:
-            b = u[0]
+            b = u[0]#next vertex
             w = u[1]
             if dist[a] + w < dist[b]:
                 dist[b] = dist[a] + w

@@ -1,53 +1,51 @@
-s = raw_input(' ')
+from bisect import bisect_left,bisect_right
+
+s = input(' ')
 n,x,y=s.split(' ')
 n=int(n)
 x=int(x)
 y=int(y)
-contests = []
-v = []
-w = []
-for i in range(n):
-    s = raw_input(' ')
-    arr = s.split(' ')
-    contests.append(map(lambda a:int(a), arr))
 
-s = raw_input(' ')
-v = [int(x) for x in s.split(' ')]
+contests = []
+
+for i in range(n):
+    s = input(' ')
+    arr = s.split(' ')
+    contests.append([int(arr[0]), int(arr[1])])
+
+#enter to portals
+s = input(' ')
+v = []
+for a in s.split(' '):
+    v.append(int(a))
 v.sort()
 
-s = raw_input(' ')
-w = [int(x) for x in s.split(' ')]
+w = []
+#exit from portals
+s = input(' ')
+for a in s.split(' '):
+    w.append(int(a))
 w.sort()
 
-min_time = float('inf')
+contests.sort()
+j1 = 0
+min_item = float('inf')
+for i in range(len(contests)):
+    s,e = contests[i]
+    j1 = bisect_right(v, s)
+    a = float('-inf')
+    if 0 <= j1-1 < len(v):
+        a = v[j1-1]
 
-def find_val(arr, target):
-    s = 0
-    e = len(arr) - 1
-    while s <= e:
-        mid = s + (e - s) // 2
-        if arr[mid] > target:
-            e = mid - 1
-        elif arr[mid] < target:
-            s = mid + 1
-        else:
-            return mid
-    if s > e:
-        return e
-    return s
+    j2 = bisect_left(w, e)
+    b = float('inf')
+    if 0 <= j2 < len(w):
+        b = w[j2]
 
-for t1,t2 in contests:
-    i = find_val(v, t1)
-    if i == len(v) or i == -1 or v[i] > t1:
-        continue
-    closest_v = v[i]
-    i = find_val(w, t2)
-    if i == len(w) or i == -1 or w[i] > t2:
-        continue
-    closest_w = w[i]
-    min_time = min(min_time, closest_w - closest_v + 1)
+    min_item = min(min_item, b - a + 1)
+print(min_item)
 
-print(min_time)
+
 
 
 

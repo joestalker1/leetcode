@@ -1,3 +1,4 @@
+#Joseph Kruskal algorithm
 class UnionFind:
     def __init__(self, n):
         self.link = [0] * n

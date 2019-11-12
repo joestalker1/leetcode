@@ -20,7 +20,7 @@ def factors(n):
             facs.append(x)
             n /= x
         x += 1
-    if n > 1:
+    if n != 1:
         facs.append(int(n))
     return facs
 
@@ -62,13 +62,42 @@ def modpow(x, n, m):
     if n % 2 == 1:
         u = (u * x) % m
     return u
-print((3 ** 6) % 7)
-#if m is prime inv of x = x ^ (m - 2)
-print(mod(2, 10))
 
-def diophantine_equation(a, b, c):
-    if c % gcd(a,b) != 0:
-        return None
+def phi(n):
+    facts = set(factors(n))
+    res = n
+    for a in facts:
+        res = res - res // a
+    return res
+
+print(phi(10))
+
+
+# print((3 ** 6) % 7)
+#if m is prime inv of x = x ^ (m - 2)
+#print(mod(2, 10))
+
+class Diophantine_equation:
+    def __init__(self):
+        self.x = 0
+        self.y = 0
+        self.d = 0
+
+    def calc(self, a, b):
+        if b == 0:
+            self.x = 1
+            self.y = 0
+            self.d = a
+            return
+        self.calc(b, a % b)
+        x1 = self.y
+        y1 = self.x - (a // b) * self.y
+        self.x = x1
+        self.y = y1
+
+de = Diophantine_equation()
+de.calc(25, 18)
+
 #wilson (n-1)! mod n = n-1 then n is prime
 def euler_totient(n):
     return 0 # number comprime numbers to n
