@@ -18,7 +18,8 @@ class MinStack:
         if len(self.stack) == 0:
             return
         y = self.stack.pop()
-        if y < self.min_val:
+        if y < self.min_val:# remove min
+            # new min item
             self.min_val = 2 * self.min_val - y
 
 
