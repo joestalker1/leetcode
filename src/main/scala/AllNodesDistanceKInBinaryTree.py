@@ -19,30 +19,44 @@ class Solution(object):
     def distanceK(self, root, target, K):
         if not root or not target:
             return None
-        res = []
+
         parent = {}
         children = {}
         self.traverse(parent, children, root)
 
+        def collect_nodes_below(v, dist, res):
+            if dist == K:
+                res.append(v)
+                return
+            if v in children:
+                for child in children:
+                    collect_nodes_below(child, dist + 1, res)
 
-        if K in m:
-            res += m[K]
-        dist = self.distance(parent, root, target)
-        if K - dist > 0:
-            diff = K - dist
-            m = self.traverse(root, target.val, diff)
-            if diff in m:
-                res += m[diff]
+        def collect_nodes_above(v, dist, res):
+            if dist == K:
+                res.append(v)
+                return
+            if v in parent:
+                collect_nodes_above(parent[v], dist + 1, res)
+            else:
+                # go down
+                if dist < K:
+                    collect_nodes_below(root.val, dist + 1, res)
+
+        res = []
+        # all nodes are below target
+        collect_nodes_below(target.val, 0, res)
+        # all nodes are above the target
+        collect_nodes_above(target.val, 0, res)
         return res
 
 
-
-arr = [3,5,1,6,2,0,8,None,None,7,4]
-arr = [0,1, None,3,2]
+arr = [3,5,1,6,2,0,8,None,None,7,4]#[7,4,1]
+#arr = [0,1, None,3,2]
 #arr=[1]
 tree = arrayToTreeNode(arr)
 sol = Solution()
-print(sol.distanceK(tree,tree.left.right, 1))#[1]
+print(sol.distanceK(tree,tree.left, 2))
 
 
 
