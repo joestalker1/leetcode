@@ -1,5 +1,5 @@
 from collections import defaultdict
-from heapq import heappop,heappush,heapify
+from heapq import heappop,heappush
 
 class Solution:
     def findCheapestPrice(self, n, flights, src, dst, K):
@@ -7,29 +7,23 @@ class Solution:
             return -1
         adj_list = defaultdict(list)
         for s,e,w in flights:
-            adj_list[s].append((w, e)) # weight, dest
+            adj_list[s].append((w, e))
 
-        dist = [float('inf')] * n
-        dist[0] = 0
-        len_path = [-1] * n
-        q = []
-        heappush(q, (0,src))
-        len_path[src] = 1
-        max_len = K + 2# count src and dst
-        seen = set()
+        q = [(0,K+1,src)]
+        #seen = set()
         while q:
-            _,u = heappop(q)
-            seen.add(u)
-            for w,v in adj_list[u]:
-                if v not in seen and dist[u] + w < dist[v]:
-                    if (v != dst and len_path[u] + 1 < max_len) or (v == dst and len_path[u] + 1 <= max_len):
-                        dist[v] = dist[u] + w
-                        len_path[v] = len_path[u] + 1
-                        heappush(q, (dist[v], v))
-        return dist[dst] if dist[dst] != float('inf') else -1
+            w,step,u = heappop(q)
+            if u == dst:
+                return w
+            if step > 0:
+                for w1,v in adj_list[u]:
+                    heappush(q, (w + w1, step - 1, v))
+        return -1
 
 
 sol = Solution()
+#print(sol.findCheapestPrice(3,[[0,1,2],[1,2,1],[2,0,10]],1,2, 1))#1
+#print(sol.findCheapestPrice(2,[[0,1,2]],1,0,0))# -1
 print(sol.findCheapestPrice(3, [[0,1,100],[1,2,100],[0,2,500]],0, 2, 0))
 print(sol.findCheapestPrice(3, [[0,1,100],[1,2,100],[0,2,500]],0, 2, 1))
 
