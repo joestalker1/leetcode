@@ -48,10 +48,46 @@ class SuffixArray:
         suffix_arr = [0] * len(s)
         for i in range(len(s)):
             suffix_arr[i] = suffix[i].index
-
         return suffix_arr
 
+def kasai(txt, suffix_arr):
+    lcp = [0] * len(txt)
+    inv_suff = [0] * len(txt)
 
-sol = SuffixArray()
-print(sol.build("banana"))
+    for i in range(len(suffix_arr)):
+        inv_suff[suffix_arr[i]] = i
 
+    k = 0
+    for i in range(len(suffix_arr)):
+        if inv_suff[i] == len(suffix_arr) - 1:
+            k = 0
+            continue
+        j = suffix_arr[inv_suff[i] + 1]
+        while i + k < len(suffix_arr) and j + k < len(suffix_arr) and txt[i + k] == txt[j + k]:
+            k += 1
+        lcp[inv_suff[i]] = k
+        if k > 0:
+            k -= 1
+    return lcp
+
+def count_distinct_substring(txt):
+    suffix_arr = SuffixArray().build(txt)
+    lcp = kasai(txt, suffix_arr)
+    res = len(txt) - suffix_arr[0]
+    for i in range(1, len(lcp)):
+        res += len(txt) - suffix_arr[i] - lcp[i - 1]
+    res += 1
+    return res
+
+n = int(input())
+arr = []
+for i in range(n):
+    s = input()
+    arr.append(s)
+
+for s in arr:
+    if len(s) == 0:
+        print(0)
+    else:
+        distinct_str = count_distinct_substring(s)
+        print(distinct_str)
