@@ -1,33 +1,45 @@
 from collections import defaultdict
 
 class Solution:
-    def count_diff(self, word1, word2):
-        count = 0
-        for ch1, ch2 in zip(word1, word2):
-            if ch1 != ch2:
-                count += 1
-            if count > 1:
-                return count
-        return count
+    def can_trans(self, word1, word2):
+        diff_count = 0
+        for i in range(len(word1)):
+            if word1[i] != word2[i]:
+                diff_count += 1
+            if diff_count > 1:
+                return False
+        return diff_count <= 1
+
+    def generate_words(self, word):
+        for i in range(len(word)):
+            yield word[0:i] + '*'+word[i + 1:]
+
 
     def ladderLength(self, beginWord: 'str', endWord: 'str', wordList: 'List[str]') -> 'int':
         if not wordList or not beginWord or not endWord:
             return 0
-        q = [beginWord]
+        all_dict = defaultdict(list)
+        for temp in self.generate_words(beginWord):
+            all_dict[temp].append(beginWord)
+
+        for word in wordList:
+            for temp in self.generate_words(word):
+                all_dict[temp].append(word)
+
+        q = [[beginWord, 1]]
         seen = set()
-        min_len = defaultdict(lambda: 1)
         seen.add(beginWord)
-        while len(q) > 0: # N
-            word = q.pop(0)
-            for word2 in wordList: #N
-                if word2 in seen:
-                    continue
-                if self.count_diff(word, word2) == 1:
-                    if word2 == endWord:
-                        return min_len[word] + 1
-                    min_len[word2] = min_len[word] + 1
-                    seen.add(word2)
-                    q.append(word2)
+        while q:
+            word, d = q.pop(0)
+            for temp in self.generate_words(word):
+                for candidate in all_dict[temp]:
+                    if candidate == endWord:
+                        return d + 1
+                    if candidate is seen:
+                        continue
+                    seen.add(candidate)
+                    q.append([candidate,d+1])
+                all_dict[temp] = []   # important optimization !!!
         return 0
 
 
@@ -44,4 +56,4 @@ print(sol.ladderLength("hot","dog", ["hot","dog","cog","pot","dot"])) #3
 #
 # print(sol.ladderLength("hot", "dog", ["hot", "cog", "dog", "tot", "hog", "hop", "pot", "dot"]))  # 3
 # print(sol.ladderLength("a", "c", ["a", "b", "c"]))
-print(sol.ladderLength("hit", "cog", ["hot", "dot", "dog", "lot", "log", "cog"]))
+print(sol.ladderLength("hit", "cog", ["hot", "dot", "dog", "lot", "log", "cog"]))#5
