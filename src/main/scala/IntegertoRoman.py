@@ -29,20 +29,8 @@ class Solution:
     def intToRoman(self, num):
         if num <= 0:
             return ''
-        roman = {}
-        roman[1] = 'I'
-        roman[4] = 'IV'
-        roman[5] = 'V'
-        roman[9] = 'IX'
-        roman[10] = 'X'
-        roman[40] = 'XL'
-        roman[50] = 'L'
-        roman[90] = 'XC'
-        roman[100] = 'C'
-        roman[500] = 'D'
-        roman[400] = 'CD'
-        roman[900] = 'CM'
-        roman[1000] = 'M'
+        roman = {1: 'I', 4: 'IV', 5: 'V', 9: 'IX', 10: 'X', 40: 'XL', 50: 'L', 90: 'XC', 100: 'C', 500: 'D', 400: 'CD',
+                 900: 'CM', 1000: 'M'}
         res = ''
         while num > 0:
             d = self.find_greater_min(num)

@@ -1,24 +1,20 @@
 class Solution:
-    def perm(self, arr):
+    def permutations(self, arr):
         if not arr:
-            return arr
+            return
 
-        def run_perm(i, res):
-            if i == len(arr):
-                res.append(arr[:])
+        def perm(l, r, res):
+            if l == r:
+                res.append(arr[::])
                 return
-            for j in range(i, len(arr)):
-                arr[i],arr[j] = arr[j],arr[i]
-                run_perm(i + 1, res)
-                arr[i], arr[j] = arr[j], arr[i]
-
+            for i in range(l, r + 1):
+                arr[i],arr[l] = arr[l],arr[i]
+                perm(l+1, r, res)
+                arr[i], arr[l] = arr[l], arr[i]
         res = []
-        run_perm(0, res)
+        perm(0, len(arr) - 1, res)
         return res
 
+
 sol = Solution()
-print(sol.perm([1,2,3]))
-
-
-
-
+print(sol.permutations([1, 2, 3, 4]))

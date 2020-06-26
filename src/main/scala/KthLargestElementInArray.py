@@ -1,25 +1,30 @@
 class Solution:
-    def quick_select(self, arr, l, r, k):
-        if 0 < k <= r - l + 1:
-            pos = self.partition(arr, l, r)
-            if pos - l == k - 1:
-                return arr[pos]
-            if pos - l > k - 1:
-                return self.quick_select(arr, l, pos - 1, k)
-            return self.quick_select(arr, pos + 1, r, k - pos + l - 1)
+    def findKthLargest(self, nums, K):
+        if not nums or K > len(nums):
+            return None
 
-    def partition(self, arr, l, r):
-        i = l
-        x = arr[r]
-        for j in range(l, r):
-            if arr[j] > x:
-                arr[i],arr[j] = arr[j],arr[i]
-                i += 1
-        arr[i], arr[r] = arr[r], arr[i]
-        return i
+        def parition(s, e):
+            i = s
+            x = nums[e]
+            for j in range(s, e):
+                if nums[j] > x:
+                    nums[i], nums[j] = nums[j], nums[i]
+                    i += 1
+            nums[e], nums[i] = nums[i], nums[e]
+            return i
 
-    def findKthLargest(self, nums, k):
-        return self.quick_select(nums, 0, len(nums) - 1, k)
+        def quick_select(s, e, k):
+            if 0 < k <= e - s + 1:
+                p = parition(s, e)
+                if p - s + 1 == k:
+                    return nums[p]#<<<<<----
+                if p - s + 1 > k:
+                    return quick_select(s, p - 1, k)
+                return quick_select(p + 1, e, k - p + s - 1)
+
+        return quick_select(0, len(nums) - 1, K)
+
 
 sol = Solution()
-print(sol.findKthLargest([3,2,1,5,6,4], 2))
+print(sol.findKthLargest([3, 2, 3, 1, 2, 4, 5, 5, 6], 4))  # 4
+print(sol.findKthLargest([3, 2, 1, 5, 6, 4], 2))
