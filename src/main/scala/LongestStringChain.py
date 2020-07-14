@@ -1,65 +1,99 @@
+from collections import defaultdict, Counter
+
+
 class Solution:
     def longestStrChain(self, words):
-        if not words:
+        if not words or len(words) == 0:
+            return 0
+
+        def differs_by_one(word, subword):
+            for i in range(len(word)):
+                cand = word[0:i] + word[i + 1:]
+                if cand == subword:
+                    return True
             return False
 
-        def is_pred(pred, succ):
-            chars = [0] * 26
-            for ch in words[pred]:
-                chars[ord(ch) - ord('a')] += 1
-            for ch in words[succ]:
-                pos = ord(ch) - ord('a')
-                chars[pos] -= 1
-                if chars[pos] < -1:
-                    return False
-            zeros = 0
-            ones = 0
-            for a in chars:
-                if a == -1:
-                    ones += 1
-                if a == 0:
-                    zeros += 1
-                if ones > 1:
-                    return False
-            return zeros == len(chars) - 1
+        word_by_len = defaultdict(list)
+        for word in words:
+            word_by_len[len(word)].append(word)
 
-        #sort by length
-        words.sort(key=lambda s: len(s))
-        dp = [1] * len(words)
         max_len = 1
-        for i in range(len(words) - 1):
-            for j in range(i + 1, len(words)):
-                if len(words[j]) > len(words[i]) + 1:
-                    break
-                if len(words[i]) < len(words[j]) and is_pred(i, j):
-                    dp[j] = max(dp[j], dp[i] + 1)
-                    max_len = max(max_len, dp[j])
+        length = {word: 1 for word in words}
+        for k in range(min(word_by_len.keys())+1, max(word_by_len.keys()) + 1):
+            for word in word_by_len[k]:
+                for subword in word_by_len[k - 1] :
+                    if differs_by_one(word, subword) and length[word] < length[subword] + 1:
+                        length[word] = max(length[word], length[subword] + 1)
+                        max_len = max(max_len, length[word])
         return max_len
 
 sol = Solution()
-arr = ["kwigbkfeqp","tpiufntqzo","blmwegckaplqwjpo","uiesdrhcbvbbk","przuvuo","kntmjgnqbxlwh","glac","uz","qqhw","gdtunmaw","neymepxl","eqtxh","qz","bek","xgadqztq","cicgtxs","grakdthb","kwigbkfeqop","uqyqhjqwegizcx","kewiygbkfejqop","tufntz","gulamac","sluiobdm","ujdyugagn","fuyz","eth","vzxiobwgyhrdkh","ikfjaivyvreql","jimpyin","cuotmvfqzizu","tkopssxh","gmwmzsowjf","nel","zo","kntmmjgnqbxtlwh","cyuicglbdtxwsu","vjrenjwntklm","uevrxuklobce","tkaopssxh","rwkedydnadd","uqyqhjqdwegizcx","ouethhse","zcmmrtilpti","tmfuxxyk","honyw","nyepl","qqhqwix","mjhg","gdtwunmaw","kigbkfeqp","wnyhsm","oeqatxhree","qyqhjqweizcx","xadqztq","wqnyghsmt","ndozeaylmetnpxlj","przuvuhob","wqnlyghnqsmtt","tkossxh","qyqhjqwix","epwcjxytvt","bexk","ga","em","zojodbw","gulmac","cizocgw","suibdm","nvcyutywhus","bwjofkuchx","f","pdtwv","dzohajcodbw","kuc","tpawplvfzlx","mg","re","oh","wciqob","el","wciqo","mftmgv","grakkdthtbd","cnbnyvuhmrj","odqphbhkf","oeqatxhre","sqzrlhs","bwsjofvkuptchx","xdqztq","tmv","kewigbkfejqop","faepomn","bdwwnalubrvxtdgu","cotmfqziz","lvzl","dmqz","hdmqz","gdigs","ujdyugag","mepjqbuvdku","g","kigbkeqp","oegqataxhree","zscinzobcgtwdwhn","fuaepwobimn","qf","cusotmvfqziknzu","qvroffuk","rweydnadd","zoow","meqcfzkbnrb","tpaplvzlx","zscinzocgwdwhn","zcmmrtilpt","ndeaymenpxlj","jimpn","wofkuchx","tkaopsssxh","vodwqphbhkfx","faepwoimn","gzenkasrciui","nyhm","tpufntqzo","ovqeyvxfdll","tufntzo","gmyrmf","vxobwgrdkh","faepwobimn","przujvuhobk","vzxobwgyrdkh","ksszdumgko","kewiylgbkfejqop","rey","vo","qqfe","moyddffrwwyzk","qzwsbnuejvsi","vodwqpzhbhjkfx","r","vttpoelti","sqzrlehhs","tpiuftntqzo","qfe","qyvsrofgnfuk","evxuklce","wiqo","prpzuujvuaxhkobk","gy","vnjxkjvmz","qroffuk","qqhwi","przuvuhobk","mfttmgvj","moydfrwzk","jibmpuyin","pwcytvt","eqtxhre","gcdtwunmaw","wfkucx","ryedhy","vttpolti","qyqhqwix","kutkavldvvqvp","el","tmfuxxyku","tplvzlx","gdtu","z","ksg","xmgadqzptq","qcqfre","zcmmrtiklpti","hobxltexk","vburq","funyz","kc","vjrenjwntklqm","wqnlyghnqsmt","sibdm","vodwqpzhbhkfx","zsnv","pouegzfyk","arci","vzxobwgyhrdkh","fetoesaot","riyedhy","cyuicgtxsu","gdtua","gchdtwgwunmaw","cuotmvfqziz","obltexk","epwcytvt","scinzocgw","ptwv","jimpuyin","uevrxukloce","tkqaopsssxh","pdtwdv","fetsaot","cyuicgldtxsu","przujvuaxhkobk","wciqoxb","gdtuna","lvzlx","ytpawcplvfzlx","uyugag","ksszdumugiko","bm","pgdmigs","grakdthtbd","uyz","zscinzobcgwdwhn","oeqataxhree","qzsbnuvs","gznkarciui","zoodw","jimpin","tqksugh","zuvo","tmgv","gdmigs","sluibdm","nvcxyzwyutywhus","bwsjofkuchx","fetsat","kgbeqp","neymenpxlj","vzxobwgrdkh","tpawcplvfzlx","qbzwsbnuejvsi","przuvuho","wqnlyguhnqsmtt","ujhadylujgaazgsn","axuelrnnnwhg","qbzwsbnuejvsmoi","qzsbnuvsi","yugag","bwsjofvkupchx","mqz","gchdtwunmaw","kntmmjgnqbxlwh","xfpt","vvburq","moydfrwk","qksgh","faepoimn","odwqphbhkfx","ryey","gchdtwwunmaw","uiesdrhcvbbk","qyqhjqwicx","yilxbltwwxh","jrenjwntkm","gzenkarciui","moyddffrhwwyezk","tqksugvhr","oveyvxfl","agmyrmf","scinzocgwdn","neymenpxl","gonpxzngjv","rwkeydnadd","zohjodbw","bdwwnalubvxtdgu","jrenjwntk","ovqheyvxubfdtll","qcqfqrezof","znkarcii","b","qzsnuvs","ndzeaylmenpxlj","tossxh","fetsa","przujvuxhkobk","ovqeyvxubfdll","tpufntzo","cuicgtxs","mv","vbur","moyddffrhwwyzk","yilxcbltwwxh","eqtxhe","zow","qbzwsbnuejvsoi","nvczwyutywhus","cyquicglbdtxwsu","evxukce","axuelrnnwhg","aci","ouemthhqse","wfkuchx","bwsjofvkmuptchx","mfjhg","bwsjofvkuchx","qffu","qyqhjqwegizcx","rzuvuo","uvo","qh","qvsrofgfuk","neymepl","mepjqybuvdku","sqzrlehs","cnbnyvumrj","qcqfqrezoif","gyrm","przujvuhkobk","cuotmvfqzinzu","gym","ujdylujgaagn","thdmmqz","honw","odwqphbhkf","ksszgko","qbzwsbnuejvsmvoi","m","gtu","qyvsrofgfuk","uqqyqhjqdwegizcx","obtexk","hobltexk","ftmgv","bwsjofvkmuptchxy","taynfxo","tqksugvhrc","jibmpduyin","vxue","zuvuo","gonpxzngv","gmpwamzsowjf","rwednadd","zv","tosh","pqdtwdv","zcmmrtsiklpti","tkqaopesssxh","ovqeyvxbfdll","gac","gsqzrlehhs","znv","cuotmvfqziknzu","ryedy","vnjoxkjvmz","pouegnzfyk","evrxuklce","ujdyujgagn","tmfnuxxyku","semj","xmgadvqzptq","cnnyvmrj","gonpxzvngjv","meqczkbnrb","bwofkuchx","fuvnyz","znarci","moydffrwzk","kwigbkfejqop","wqnyghnsmt","uiesdrehcbvobbk","qcqfreo","zohajodbw","nvcxyzwyutywhuhs","scinzocgwdwn","ksyszdumugiko","qfu","mjg","zsnuvs","eqth","ccgtxs","pgdmidtgs","rwednad","lel","cusotmvfqzwiknzu","znkarciui","o","qzsbnuevsi","veodwqpzhbhjkfx","jrenjwntklm","gmwamzsowjf","ndeymenpxlj","moydffrwwzk","nvczyutywhus","dzohajodbw","ujadylujgaazgsn","nvcytywhus","qcqfrezo","mfttmgv","tqksugvh","qksg","njxkjvmz","udyugag","qffuk","ksszdugko","wkuc","tmfxxyk","qqh","sbdm","rwedna","ovqheyvxubsfdtll","ndzeaymenpxlj","neyepl","qf","xgadqzptq","redna","pougzfyk","zarci","mftbtmgvj","taplvzlx","uiesdrhcbvobbk","ovqeyvxfdl","qcqfrezof","qvrofgfuk","scizocgw","mftbtmgvdj","rsgwmsted","ovqheyvxubfdll","oveyvxfdl","m","wi","znkarci","ikfjaivyvrql","pgdmidgs","btexk","cuotmfqziz","xdqzq","jimp","qqhqwi","lvz","ilojawyersju","wnyhm","gsqzrlenhhs","bu","wkucx","bdm","lsel","tpawplvzlx","ai","kntmmjognqbxtlwh","hkonyw","vxuce","zsnvs","qyqhjqweicx","nyel","cyuicgtxs","qzsbnuejvsi","ujadylujgaagsn","thdmqz","ilojawyersu","uevirxuklobce","qrffuk","zoodbw","sem","cyuicgldtxwsu","wnyhsmt","prpzujvuaxhkobk","uesdrhcvbbk","vhvburq","ndzeaylmetnpxlj","ksszdgko","scinzocgwd","cyuicgltxsu","ptw","mplaxm","scinzocgwdwhn","ytpawcplvifzlx","evxuce","bur","kigbeqp","ksszdumugko","cnnyvumrj","toh","kewiylgbkfejqfop","gulac","pugzfyk","nvcyzwyutywhus","ouemthhse","wqnyghnqsmt","b","ujdylujgagn","tlvzlx","pgidmidtgs","eqatxhre","gmyrm","dqzq","oveyvxl","vttpoeltci","gk","wqnyhsmt","zcmmrtsitklpti","iaxuelrnnnwhg","gdtunma","ujadylujgaagn","tqksgh","moydffrwwyzk","mfftbtmgvdj","wio","fetosaot","grakdthtb","nxmrvm","evrxukloce","ikfjaivyrql","tosxh","grakkbdthtbd","epwcxytvt","blmwegckaplwjpo","qcqfe"]
-print(sol.longestStrChain(arr))#16
-#7
-#arr = ["gr","grukmj","gruj","grukkmj","grukj","gru"]
-#arr = ["czvh","zczpzvdhx","zczpzvh","zczpzvhx","zcpzvh","zczvh", "zczpzfvdhx"]
-#arr = ["ksqvsyq","ks","kss","czvh","zczpzvdhx","zczpzvh","zczpzvhx","zcpzvh","zczvh","gr","grukmj","ksqvsq","gruj","kssq","ksqsq","grukkmj","grukj","zczpzfvdhx","gru"]
-#print(sol.longestStrChain(arr))
-print(sol.longestStrChain(["a","b","ba","bca","bda","bdca"]))
-
-
-# nel
-# nyel
-# nyepl
-# neyepl
-# neymepl
-# neymepxl
-# neymenpxl
-# neymenpxlj
-# ndeymenpxlj
-# ndeaymenpxlj
-# ndzeaymenpxlj
-# ndzeaylmenpxlj
-# ndzeaylmetnpxlj
-# ndozeaylmetnpxlj
-
-
+print(sol.longestStrChain(
+    ["uiykgmcc", "jrgbss", "mhkqodcpy", "lkj", "bwqktun", "s", "nrctyzifwytjblwy", "wrp", "scqlcwmxw", "irqvnxdcxoejuu",
+     "gmlckvofwyifmrw", "wbzbyrcppaljigvo", "lk", "kfeouqyyrer", "efzzpvi", "ubkcitcmwxk", "txihn", "mdwdmbtx",
+     "vuzvcoaif", "jwmboqvhpqodsj", "wscfvrfl", "pzye", "waxyoxftvrgqmkg", "wwdidopozinxxn", "dclpg", "xjsvlxktxs",
+     "ajj", "pvsdastm", "tatjxhygidhn", "feafycxdxagn", "irqvnxxoeuu", "kwjo", "tztoovsyfwz", "prllrw", "sclmx",
+     "bbmjnwaxcwaml", "gl", "wiax", "uzvcoaif", "ztovyfwz", "qxy", "zuexoxyp", "qxyyrl", "pvsdasvtm", "femafycxdxaagn",
+     "rspvccjcm", "wvyiax", "vst", "efzi", "fjmdcc", "icsinrbpql", "ctybiizlcr", "ntyzfwytjblw", "tatjxhygidhpn", "e",
+     "kykizdandafusu", "pnepuwcsxl", "kfeuqyyrer", "afplzhbqguu", "hvajtj", "prll", "ildzdimea", "zueoxp", "ezi", "lqr",
+     "jkaagljikwamaqvf", "mlzwhkxsn", "rspvccbcjjtcm", "wscfvrl", "m", "msygukwlkrqboc", "pifojogoveub", "bkcmwx",
+     "jercgybhss", "wrpi", "aicsinkgrbpqli", "aplzbuu", "sclcmxw", "atpepgsz", "govrcuuglaer", "bdxjpsvlxkytxs",
+     "uikgm", "bm", "wvyhiqax", "znvaasgfvqi", "hatpepgsz", "hrzebpa", "bnfz", "lybtqrfzw", "taxhygihn", "bjnfzk",
+     "mhqp", "ide", "znvcaasgfvqi", "ftv", "afplzhbqsguuu", "thn", "pdbccbe", "mxevopfoimgjww", "fjmdrcce",
+     "rspvccjjcm", "jv", "motnfwohwule", "xjsvlxtxs", "bqeb", "eug", "jftavwgl", "rzebpa", "lybtqrfazw", "zuexoxp",
+     "jercgybhsys", "hajtj", "bkcitcmwxk", "mbpvxsdastvtm", "mowlznwhkxsn", "dvenn", "rsacxe", "tatjxhygihn",
+     "cotybiizlcr", "bbmnaxaml", "pkwrpsi", "nqpdbccbkxens", "mbpbovxsdastvtm", "mj", "pxpsvikwekuq", "qeug",
+     "dmelddga", "aicsinkgrbpxqli", "bdxjpsvlxktytxs", "pkrllrxw", "jkgljikwmaqf", "iddie", "ctybiizcr", "nyzfwytjblw",
+     "yvuhmiuehspi", "keuqre", "wzbypaigvo", "sck", "uzcoaf", "dlpg", "ubkcpitlscmwxk", "molzwhkxsn", "pepuwcsxl",
+     "laplm", "dclpgc", "mahkxqodcpy", "sclcmx", "hvrzebpaz", "bgovrcuuglaer", "clazpulmw", "yvuyhmiuehspiq",
+     "wzbycpaljigvo", "sceqalciwmxw", "hjytflmvsgv", "u", "hjyvxytfflhmvsgv", "jkgjikwmaqf", "fefycxdxagn", "ftvw",
+     "ofncgxrkqvcr", "spvcjc", "pvsdastvtm", "kykzdandaus", "wbzbycppaljigvo", "haytpepgsz", "jmowlznwhkxsn",
+     "aplzhbguu", "zvyz", "nfvqi", "jfvtavwsgl", "xejnllhfulns", "zhhvbiqiw", "jkgljikwmaqvf", "tyizc", "irqvnxcxoejuu",
+     "clvazzpulmw", "oncgxrqvcr", "qlupvpdkhrm", "mtnfwohwule", "wwdidopzozinxxn", "auiykgmcc", "wscfvrfyl",
+     "pfksmrullrxw", "jwmoqvhpqods", "ftavwg", "iddiea", "kcmw", "ykkwjwo", "pe", "aplzbguu", "eu", "bbmnaxal",
+     "ntyswtnlab", "zhhhvbhbiqiw", "jwmoqvpqods", "kykzdndaus", "bbmjnaxcwaml", "zunvcaasgfvqi", "icsingrbpql",
+     "sceqalciwmsxyw", "yvuhmiuehsp", "bxjsvlxktxs", "waxoxftvrgqmkg", "cogxxpaknks", "scllvazzpulmw", "tatjxhygeidhpn",
+     "ftvwg", "tyz", "nafvqi", "oby", "pgzpkhqog", "irqvnxxoejuu", "oxwpkxlakcp", "bnf", "oxwnpkxlakcp", "bwqktu",
+     "ufybbaozoqk", "ntydswtnlab", "zvyfz", "znaafvqi", "npdbccbke", "mhkqocpy", "kuq", "bjnfz", "taxhyihn", "kwrpsi",
+     "qifepmcatbdjlf", "lzwhks", "kfeuqre", "mxevopfoimgww", "spvcjcm", "oncgxrkqvcr", "jftavwsgl", "soifcbya",
+     "jpzyeg", "jwmboqvhpqods", "lapulm", "jrgbhss", "xejfnllhfulns", "zhhhvbbiqiw", "km", "kuqre", "scxlzlvazzpulmw",
+     "ztvyfwz", "wbzbycpaljigvo", "rzbpa", "vsastm", "uybaooqk", "dn", "ykwjwo", "ufybmvbaozoqk", "nknm",
+     "mbpvsdastvtm", "dpgzpxykhqog", "wzbypajigvo", "bnjnfzk", "eollbigtftpdrd", "zhbiqiw", "yvuhiuehp",
+     "zhhhvbhbiqiwg", "pfksrullrxw", "pzyeg", "aplzhbqguu", "z", "hvrzecbpazw", "clvazpulmw", "tajxhygihn",
+     "pgzpxykhqog", "fefyxdxagn", "wimomuvhn", "lqrzw", "xejnlhfulns", "jhrc", "xsxxs", "slmx", "jrgss", "uikgmc",
+     "ncgqvcr", "womuhn", "aryouvtnmme", "uzco", "zhhhvbiqiw", "hjytflhmvsgv", "znvaasfvqi", "kuqr", "ojrpp",
+     "ztoovyfwz", "zvz", "pxpsviweuq", "ufybaooqk", "xy", "jfvvtavwksvgl", "raiachv", "bmnaxl", "rspvccjjtcm",
+     "pgzpxkhqog", "xhbtfnqebaj", "sceqalciwmsxw", "jssctk", "uzvcoaf", "fefydxagn", "jhrvc", "mbj", "raiahv",
+     "nrtyzifwytjblwy", "mhqcp", "jkgjkwmaqf", "wscfvrfylhi", "lqrz", "ahabucermswyrvl", "wxoxftvrgqmkg", "ku", "uyaoq",
+     "mhqocp", "ykwjo", "vstm", "ofncgxrkqvcwr", "dqvh", "taxyihn", "idie", "bwqtu", "tztoovyfwz", "rspvcccjjtcm",
+     "uojrpp", "wmomuhn", "cotycbiizlxcr", "nrtyzfwytjblw", "ocbya", "sceqlciwmxw", "ajtj", "rspvccbcjjthcm",
+     "kfeuqyyre", "dmelddg", "txyihn", "ubkcitlscmwxk", "ntyswtnla", "bdxjpstvlxktytxs", "odqdvbh", "pxpsvikeewekuq",
+     "mdwdmbdtux", "vs", "bma", "wzbypigvo", "qxyy", "vsstm", "hbtnqeba", "hrzebpaz", "xhbtfnjsqebbaj", "ahaucermswyrv",
+     "ddmbtx", "zhhbiqiw", "pxpsvikewekuq", "odqdvgbh", "bxjpsvlxktxs", "jsck", "fjmdc", "mdwdmbdtx", "jqxyyrl",
+     "pxpsvikweuq", "ctybizcr", "dqvbh", "lpl", "lqrfzw", "ufybaozoqk", "znvaafvqi", "yvuhmiuehp", "hvrzebpazw",
+     "pfksrllrxw", "alzuu", "xjsvxtxs", "afplzhbqguuu", "icsingrbpqli", "hjxytflhmvsgv", "femafycxdxagn", "uyaoqk",
+     "gmlckvofwyifrw", "cinrbpql", "jrcgbhss", "oxwpkxlkcp", "jkagljikwamaqvf", "eollbigtftpdrdy", "rspvcjcm", "socbya",
+     "clapulm", "qeb", "kwrpi", "efzpi", "hbtfnqebaj", "kykizdnandafusu", "sclvazzpulmw", "efzzpvvi", "jfvvtavwsvgl",
+     "mhqocpy", "v", "mbpbvxsdastvtm", "irqvnxouu", "hvaajtj", "ofnlcgxrkqvcwr", "hbtqeba", "hbtqeb", "jwmqpds",
+     "ntrnlhujdslco", "zv", "npdbccbken", "mhp", "ddb", "prllw", "mddmbtx", "clazpulm", "cogxxpaknkse", "bkitcmwxk",
+     "oxwpklkcp", "tyiz", "jwmqvpqods", "waxyoxftvrgqmkgb", "afplzhbbqsgujuu", "bwtu", "jercgbhss", "rsacx",
+     "mahkqodcpy", "cotycbiizlcr", "ahabucermswyrv", "lupvpkhr", "dvnn", "b", "atpepsz", "ncgxqvcr", "qe",
+     "ubkcitlcmwxk", "lyqrfzw", "wimomuhn", "bbmnaxl", "motnfwohrwule", "yvuyhmiuehspi", "jfvvtavwsgl", "rac",
+     "fefdxagn", "bwqkctun", "uotjrpp", "ddbtx", "afplzhbbqsguuu", "xss", "xsxs", "wvyiqax", "kykizdandaus",
+     "npdbccbkens", "r", "oxwnpkxjlakcp", "tzmteoovsyfwz", "kykizdnandafuspu", "ahabulcermswyrvl", "xjsxxs", "qxyyr",
+     "ck", "xhbtfnqebbaj", "nqpdbccbkens", "mpvsdastvtm", "zuexqoxyp", "gmlkvofwyifrw", "kmw", "txhn", "kykizdandausu",
+     "molznwhkxsn", "lupvpdkhr", "jwmqvpds", "bktcmwx", "wyiax", "hzvaajtj", "ddbx", "pifojogveub", "naafvqi",
+     "motnfwjohrwule", "odqvbh", "aicsingrbpqli", "jopzyeg", "lybtqrfazrw", "pijogveub", "xzejfnllhfulns",
+     "scxllvazzpulmw", "irqyvnxdcxfoejuu", "cogxpaknks", "pdkwrpsi", "wzbycpajigvo", "xjsxtxs", "irqvnxdcxfoejuu",
+     "xhbtfnjqebbaj", "uybaoqk", "oncgxqvcr", "aj", "pepuwsxl", "lytqrfzw", "nkm", "jrgs", "pkrllrw", "wscfvrfyli",
+     "bbmjnaxcaml", "jftavwg", "vuzvcozaif", "pifjogveub", "cmogxxpaknkse", "cinrbql", "scqlciwmxw", "ztvyfz",
+     "mxyevopfoimgjpww", "soicbya", "lupvpdkhrm", "ahaucermsyrv", "ufybmvbaouzoqk", "bdxjpsvlxktxs", "hjxytfflhmvsgv",
+     "hjvxytfflhmvsgv", "nqpdbccbzkxens", "wr", "kykzdndus", "iddimea", "fjmdrcc", "efzzpi", "vsdastm", "btqeb",
+     "pfkrllrxw", "ocby", "irqvnxxouu", "ildzpdimea", "lzwhkxsn", "ilddimea", "ufybvbaozoqk", "mxyevopfoimgjww", "jhr",
+     "kcmwx", "dvn", "uzcof", "glw", "hbtnqebaj", "riahv", "w", "qeugv", "kfeuqyre", "ilrdzpdimea", "lplm", "icinrbpql",
+     "scqlcmxw", "bbmjnaxaml", "e", "rsac", "bf", "jwmqvpqds", "tzteoovsyfwz", "rc", "lzwhkxs", "jkgljikwamaqvf",
+     "tybizc", "aplzuu", "nrtyzifwytjblw", "pze", "bktcmwxk", "uiykgmc", "jsctk", "npdbccbe", "tybizcr"]))  # 15
+# print(sol.longestStrChain(
+#     ["sgtnz", "sgtz", "sgz", "ikrcyoglz", "ajelpkpx", "ajelpkpxm", "srqgtnz", "srqgotnz", "srgtnz",
+#      "ijkrcyoglz"]))  # 16
+print(sol.longestStrChain(["a", "b", "ba", "bca", "bda", "bdca"]))  # 4

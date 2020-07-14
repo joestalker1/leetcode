@@ -2,7 +2,7 @@ class Solution:
     def maximalSquare(self, matrix):
         if not matrix:
             return 0
-        dp = [0] * (len(matrix) + 1)
+        dp = [[0]] * (len(matrix) + 1)
         for i in range(len(dp)):
             dp[i] = [0] * (len(matrix[0]) + 1)
         max_len = 0
@@ -17,13 +17,13 @@ class Solution:
 
 
 sol = Solution()
-arr = [["0","0","0","0","1","1","1","0","1"],["0","0","1","1","1","1","1","0","1"],["0","0","0","1","1","1","1","1","0"]]
-print(sol.maximalSquare(arr))
+# arr = [["0","0","0","0","1","1","1","0","1"],["0","0","1","1","1","1","1","0","1"],["0","0","0","1","1","1","1","1","0"]]
+# print(sol.maximalSquare(arr))
 
 arr = [["1","0","1","0"],["1","0","1","1"],["1","0","1","1"],["1","1","1","1"]]
-#print(sol.maximalSquare(arr))
+print(sol.maximalSquare(arr))
 arr = [["1","1"],["1","1"]]
-#print(sol.maximalSquare(arr))
+print(sol.maximalSquare(arr))
 arr = [[1, 0, 1, 0, 0],
        [1, 0, 1, 1, 1],
        [1, 1, 1, 1, 1],
@@ -36,4 +36,4 @@ arr = [[1, 0, 1, 0, 0],
 
 
 
-        
+
