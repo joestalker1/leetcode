@@ -1,5 +1,3 @@
-from collections import defaultdict, Counter
-
 
 class Solution:
     def longestStrChain(self, words):
@@ -13,19 +11,20 @@ class Solution:
                     return True
             return False
 
-        word_by_len = defaultdict(list)
-        for word in words:
-            word_by_len[len(word)].append(word)
+        words.sort(key=lambda x: len(x))
 
+        dp = [1] * len(words)
         max_len = 1
-        length = {word: 1 for word in words}
-        for k in range(min(word_by_len.keys())+1, max(word_by_len.keys()) + 1):
-            for word in word_by_len[k]:
-                for subword in word_by_len[k - 1] :
-                    if differs_by_one(word, subword) and length[word] < length[subword] + 1:
-                        length[word] = max(length[word], length[subword] + 1)
-                        max_len = max(max_len, length[word])
+        for i in range(1, len(words)):
+            for j in range(i - 1, -1, -1):
+                if len(words[i]) == len(words[j]) + 1:
+                    if differs_by_one(words[i], words[j]):
+                        dp[i] = max(dp[i], dp[j] + 1)
+                        max_len = max(max_len, dp[i])
+                elif len(words[i]) > len(words[j]) + 1:
+                    break
         return max_len
+
 
 sol = Solution()
 print(sol.longestStrChain(
