@@ -9,48 +9,66 @@ class Master:
                 match += 1
         return match
 
+
 class Solution(object):
     def findSecretWord(self, wordlist, master):
         n = len(wordlist)
+        # number matches between i and j words in wordlist
         self.h = [[0] * n for _ in range(n)]
         for i in range(n):
             for j in range(n):
-                c = 0
+                matched = 0
                 for k in range(len(wordlist[0])):
                     if wordlist[i][k] == wordlist[j][k]:
-                        c += 1
-                self.h[i][j] = c
+                        matched += 1
+                self.h[i][j] = matched
+        # possible holds indexes of possible words
         possible = [i for i in range(n)]
+        # used words
         path = set()
+        # try every words
         while possible:
+            # find guess, it's index
             guess = self.solve(possible, path)
+            # try this guess
             match = master.guess(wordlist[guess])
+            # if matched 6 chars, return this word
             if match == len(wordlist[0]):
                 return len(wordlist[0])
+            # form new possible list
             possible2 = []
             for j in possible:
+                # get words having matched chars with guess
                 if match == self.h[guess][j]:
                     possible2.append(j)
             possible = possible2
+            # mark guess as used
             path.add(guess)
         return -1
 
-    def solve(self, possible, path = ()):
-        if len(possible) <= 2:
-            return possible[0]
-        ansgrp = possible
+    def solve(self, possible, path=()):
+        # find new words
+        max_min_len = len(possible)
+        # new word index
         ans = -1
         for guess in range(len(self.h)):
+            # consider candidates from self.h
             if guess not in path:
+                # if candidate hasn't be not used
+                # check if it matches with words from possible
                 groups = [[] for _ in range(7)]
                 for j in possible:
                     if j != guess:
+                        # group by number of matched chars
                         groups[self.h[guess][j]].append(j)
-                maxgroup = max(groups, key = len)
-                if len(maxgroup) < len(ansgrp):
-                    ansgrp = maxgroup
+                # take group with max cardinality
+                maxgroup = max(groups, key=len)
+                # if group has less member, it will be our new group and guess is new result
+                if len(maxgroup) < max_min_len:
+                    max_min_len = len(maxgroup)
                     ans = guess
         return ans
+
 
 
 arr = ["gaxckt", "trlccr", "jxwhkz", "ycbfps", "peayuf", "yiejjw", "ldzccp", "nqsjoa", "qrjasy", "pcldos", "acrtag",

@@ -1,12 +1,16 @@
 class Solution:
     def find_max_hist(self, hist):
-        st = [-1]
+        st = [-1] # oto
         max_area = 0
         for i in range(len(hist)):
+            # pop if stack pop is greater then current height
+            # push to the if current height < stack top
             while st[-1] != -1 and hist[st[-1]] >= hist[i]:
                 j = st.pop()
+                #calculate square left_mort, current histogram
                 max_area = max(max_area, hist[j] * (i - st[-1] - 1))
             st.append(i)
+        #if stack is not empty, let's pop this heights using len(hist) as left boundary
         while st[-1] != -1:
             max_area = max(max_area, hist[st.pop()] * (len(hist) - st[-1] - 1))
 

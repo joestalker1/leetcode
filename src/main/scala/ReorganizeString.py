@@ -5,28 +5,25 @@ class Solution:
     def reorganizeString(self, S):
         if not S:
             return ''
-        freq = defaultdict(int)
-        for ch in S:
-            freq[ch] += 1
-        q = []
-        for ch,fr in freq.items():
-            heappush(q, [-fr, ch])
+        q = [[-S.count(x), x] for x in set(S)]
+        heapq.heapify(q)
+        if any(-nc > (len(S) + 1)// 2 for nc,x in q):
+            return ''
         res = []
-        while q:
-            f1,ch1 = heappop(q)
-            if res and res[-1] == ch1:
-                return ''
-            res.append(ch1)
-            f1 += 1
-            if q:
-                f2,ch2 = heappop(q)
-                res.append(ch2)
-                f2 += 1
-                if f2:
-                    heappush(q, [f2, ch2])
-            if f1:
-                heappush(q, [f1,ch1])
-        return ''.join(res)
+        while len(q) >= 2:
+            nc1,x1 = heappop(q)
+            nc2,x2 = heappop(q)
+            if not res or res[-1] != x1:
+                res.extend([x1,x2])
+            else:
+                res.extend([x2,x1])
+            nc1+=1
+            nc2 += 1
+            if nc1:
+                heappush(q, [nc1, x1])
+            if nc2:
+                heappush(q, [nc2, x2])
+        return ''.join(res) + (q[-1][1] if q else '')
 
 
 sol = Solution()
