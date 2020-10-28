@@ -1,21 +1,21 @@
 from collections import defaultdict
 
 class Solution:
-    def getHint(self, secret, guess):
-        # count bulls
-        bulls = 0
-        for i in range(len(secret)):
-            if secret[i] == guess[i]:
+    def getHint(self, secret: str, guess: str) -> str:
+        h = defaultdict(int)
+        bulls = cows = 0
+
+        for idx, s in enumerate(secret):
+            #
+            g = guess[idx]
+            if s == g:
                 bulls += 1
+            else:
+                # bool expression is true, it's converted to int 1
+                cows += int(h[s] < 0) + int(h[g] > 0)
+                # if g is in secret, (h[g] > 0)
+                h[s] += 1
+                # if g is in secret and in guess, so it's cow
+                h[g] -= 1
 
-        cows = 0
-        char_pos = defaultdict(list)
-        for i in range(len(guess)):
-            char_pos[secret[i]].append(i)
-
-        for i in range(len(secret)):
-            if secret[i] != guess[i]:
-                if guess[i] in char_pos and len(char_pos[guess[i]]) > 0:
-                    cows += 1
-                    char_pos[guess[i]].pop()
-        return 'A{}B{}'.format(bulls, cows)
+        return "{}A{}B".format(bulls, cows)

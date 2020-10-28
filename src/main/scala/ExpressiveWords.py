@@ -1,38 +1,31 @@
 class Solution:
-    def enocode(self, s):
-        res = []
-        last = s[0]
-        count = 1
-        for c in s[1:]:
-            if last != c:
-                res.append([last, count])
-                count = 1
-                last = c
-            else:
-                count += 1
-        res.append([c, count])
-        return res
-
     def expressiveWords(self, S, words):
-        chars1 = self.enocode(S)
-        count = 0
+        def make_group(s):
+            groups = []
+            for ch in s:
+                if not groups or groups[-1][0] != ch:
+                    groups.append([ch,1])
+                else:
+                    groups[-1][1] += 1
+            return groups
+
+        target_group = make_group(S)
+        res = 0
         for word in words:
-            chars2 = self.enocode(word)
-            if len(chars1) != len(chars2):
+            word_group = make_group(word)
+            if len(word_group) != len(target_group):
                 continue
-            next_word = False
-            i = 0
-            j = 0
-            while i < len(word) and j < len(chars1):
-                if chars1[j][0] != chars2[i][0] or chars2[i][1] < chars1[j][1] < 3 or chars1[j][1] < chars2[i][1]:
-                    next_word = True
+            stretchy = True
+            for i in range(len(target_group)):
+                ch1,c1 = target_group[i]
+                ch2,c2 = word_group[i]
+                if ch1 != ch2 or (c1 < 3 and c1 != c2) or c2 > c1:
+                    stretchy = False
+                if not stretchy:
                     break
-                i += 1
-                j += 1
-            if next_word:
-                continue
-            count += 1
-        return count
+            if stretchy:
+                res += 1
+        return res
 
 
 sol = Solution()

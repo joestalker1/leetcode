@@ -1,19 +1,21 @@
 class Solution:
     # rows are applicants
     # colums are jobs
-    def search(self, u, graph, job_to_ap, seen):
+    def dfs(self, u, graph, job_to_ap, seen):
+        # u is applicant
         for v in range(len(job_to_ap)):
-            # if job is processed or not interested,skip it
+            # if job is processed or applicant u aren't interested,skip it
             if v in seen or not graph[u][v]:
                 continue
             seen.add(v)
-            # if job is assigned to, let search new job for job applicant
+            # if job is assigned to, let search new job for old applicant having this v
             if not job_to_ap[v] or self.search(job_to_ap[v], graph, job_to_ap, seen):
                 job_to_ap[v] = u
                 return True
         return False
 
     def matching(self, graph):
+        #applicant number
         n = len(graph)
         # job number
         m = len(graph[0])
@@ -21,7 +23,7 @@ class Solution:
         matched = 0
         for u in range(n):
             seen = set()
-            if self.search(u, graph, job_to_ap, seen):
+            if self.dfd(u, graph, job_to_ap, seen):
                 matched += 1
         return matched
 
