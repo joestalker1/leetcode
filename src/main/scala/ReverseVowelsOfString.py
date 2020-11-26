@@ -14,8 +14,4 @@ class Solution:
             j -= 1
         return ''.join(chars)
 
-
-sol = Solution()
-print(sol.reverseVowels("\"Ma,\" Jerome raps pot top, \"spare more jam!\""))
-print(sol.reverseVowels("aA"))
-print(sol.reverseVowels("hello"))
+    

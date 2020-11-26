@@ -12,4 +12,4 @@ def combination(arr, k):
     return ans
 
 
-print(combination([1, 2, 3, 4], 2))
+print(combination([1, 2, 3, 4], 5))

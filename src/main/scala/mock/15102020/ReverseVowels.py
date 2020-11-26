@@ -1,8 +1,8 @@
 class Solution:
     def reverseVowels(self, s):
-        vowles = {'a', 'e', 'i', 'o', 'u', 'A', 'E', 'I', 'O', 'U'}
+        vowles = ['a', 'e', 'i', 'o', 'u', 'A', 'E', 'I', 'O', 'U']
         i = 0
-        chars = list(s)
+        chars = [ch for ch in s]
         j = len(chars) - 1
         while i < j:
             while i < j and chars[i] not in vowles:
@@ -14,8 +14,5 @@ class Solution:
             j -= 1
         return ''.join(chars)
 
-
 sol = Solution()
 print(sol.reverseVowels("\"Ma,\" Jerome raps pot top, \"spare more jam!\""))
-print(sol.reverseVowels("aA"))
-print(sol.reverseVowels("hello"))
