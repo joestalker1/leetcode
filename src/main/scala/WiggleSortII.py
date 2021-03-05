@@ -1,53 +1,51 @@
 class Solution:
-    def swap(self, nums, i1, i2):
-        t = nums[i1]
-        nums[i1] = nums[i2]
-        nums[i2] = t
-
-    def swap_pairs(self, nums, i1, i2):
-        self.swap(nums, i1, i2)
-        if i1+1 < len(nums) and (i2+1) < len(nums):
-            self.swap(nums, i1 + 1, i2 + 1)
-
-
-    def find_greater(self, nums, a, i):
-        while i < len(nums) and nums[i] <= a:
-            i += 1
-        return i if i < len(nums) else -1
-
     def wiggleSort(self, nums):
-        if not nums:
-            return
-        mean = sum(nums)
-        mean = mean / len(nums)
+        def parition(s, e):
+            i = s
+            x = nums[e]
+            for j in range(s, e):
+                if nums[j] > x:
+                    nums[i], nums[j] = nums[j], nums[i]
+                    i += 1
+            nums[e], nums[i] = nums[i], nums[e]
+            return i
+
+        def quick_select(s, e, k):
+            # if k > 0 but [e - s+1]
+            if 0 < k <= e - s + 1:
+                # find p element
+                p = parition(s, e)
+                # if found K element, then return it.
+                if p - s + 1 == k:
+                    return nums[p]
+                # otherwsie if k is in left part
+                if p - s + 1 > k:
+                    return quick_select(s, p - 1, k)
+                # otherwise it is in right part
+                # calculate delta (k - p - 1)
+                return quick_select(p + 1, e, s + (k - p - 1))
+
+        def mapInd(i):
+            return (2 * i + 1) % (len(nums) | 1)
+
+        n = len(nums)
+        median = quick_select(0, n - 1, (n + 1) // 2)
+        left = 0
         i = 0
-        j = 0
-        while i < len(nums) - 1:
-            if nums[i] <= mean and j < len(nums):
-                self.swap(nums, i, j)
-                j += 1
-            i += 1
-
-        for i in range(len(nums)):
-            if i % 2 == 1 and j < len(nums):
-                self.swap(nums, i, j)
-                j += 1
-
+        right = n - 1
+        while i <= right:
+            if nums[mapInd(i)] > median:
+                nums[mapInd(left)],nums[mapInd(i)] = nums[mapInd(i)],nums[mapInd(left)]
+                left += 1
+                i += 1
+            elif nums[mapInd(i)] < median:
+                nums[mapInd(right)],nums[mapInd(i)] = nums[mapInd(i)],nums[mapInd(right)]
+                right -= 1
+            else:
+                i += 1
+        return nums
 
 
 sol = Solution()
-arr = [4,5,5,5,5,6,6,6]
-sol.wiggleSort(arr)
-# print(arr)
-# arr = [1,1,2,1,2,2,1]
-# sol.wiggleSort(arr)
-# print(arr)
-# arr = [4,5,5,6]
-# sol.wiggleSort(arr)
-# print(arr)
-# arr = [1,1,1,2,2,2]
-# sol.wiggleSort(arr)
-# print(arr)
-# arr = [1, 5, 1, 1, 6, 4]
-# sol.wiggleSort(arr)
-# print(arr)
+print(sol.wiggleSort([1,3,2,2,3,1]))#[2,3,1,3,1,2]
+

@@ -6,9 +6,7 @@ class Dsu:
 
     def find(self, x):
         if self.parent[x] != x:
-            p = self.find(self.parent[x])
-            self.parent[x] = p
-            return p
+            self.parent[x] = self.find(self.parent[x])
         return self.parent[x]
 
     def union(self, x1, x2):

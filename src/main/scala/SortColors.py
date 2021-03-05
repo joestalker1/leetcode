@@ -1,20 +1,22 @@
 class Solution:
-    def sortColors(self, nums):
-        if not nums:
-            return nums
-        p0 = 0
-        p2 = len(nums) - 1
-        cur = 0
-        while cur <= p2:
-            if nums[cur] == 0:
-                nums[p0], nums[cur] = nums[cur], nums[p0]
-                cur += 1
-                p0 += 1
-            elif nums[cur] == 2:
-                nums[p2], nums[cur] = nums[cur], nums[p2]
-                p2 -= 1
+    def sortColors(self, nums) -> None:
+        #three ways partitioning
+        lo = 0
+        mid = 0 #first pointer
+        hi = len(nums) - 1 #second pointer
+        while mid <= hi:
+            if nums[mid] == 0:#red
+                #swap nums[lo] and nums[mid]
+                nums[lo],nums[mid] = nums[mid],nums[lo]
+                lo += 1
+                mid += 1
+            elif nums[mid] == 2:#blue
+                #swap nums[mid] and nums[hi]
+                nums[mid],nums[hi] = nums[hi],nums[mid]
+                hi -= 1
             else:
-                cur += 1
+                mid += 1 # white
+
 
 
 sol = Solution()
