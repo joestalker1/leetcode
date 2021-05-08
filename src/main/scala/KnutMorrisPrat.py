@@ -11,7 +11,6 @@ def get_lps(pat):
             if l != 0:
                 l = arr[l - 1]
             else:
-                arr[i] = 0
                 i += 1
     return arr
 

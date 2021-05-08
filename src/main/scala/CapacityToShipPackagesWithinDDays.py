@@ -1,30 +1,32 @@
 class Solution:
-    def enough_belt_capacity(self, weights, max_w, d):
-        days = 0
-        capacity = max_w
-        for weight in weights:
-            if weight > max_w:
-                return False
-            if weight > capacity:
-                #move to the next day to carry the left packages
-                days += 1
-                capacity = max_w - weight
-            else:
-                capacity -= weight
-        days += 1
-        return days <= d
-
-    def shipWithinDays(self, weights, D):
-        if not weights or D == 0:
-            return 0
+    def shipWithinDays(self, weights: List[int], D: int) -> int:
         lo = 0
-        hi = 50000 * 500
+        hi = 25000001
+        total = sum(weights)
+
+        def can_ship(total, w):
+            # check if we ship all packages for <= D
+            d = 0
+            daily_load = 0
+            for weight in weights:
+                if weight > w:
+                    return False
+                if daily_load + weight <= w:
+                    daily_load += weight
+                else:
+                    daily_load = weight
+                    d += 1
+            # increment for last iteration
+            d += 1
+            return d <= D
+
         while lo < hi:
-            max_w = lo + (hi - lo) // 2
-            if self.enough_belt_capacity(weights, max_w, D):
-                hi = max_w
+            m = lo + (hi - lo) // 2
+            # try to bound load from up
+            if can_ship(total, m):
+                hi = m
             else:
-                lo = max_w + 1
+                lo = m + 1
         return lo
 
 

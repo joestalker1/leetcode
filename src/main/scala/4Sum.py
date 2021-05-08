@@ -1,71 +1,25 @@
+from collections import defaultdict
+
 class Solution:
-    def twoSum(self, nums, target, start, end):
-        res = []
-        i = start
-        j = end
-        while i < j:
-            sum_of_two = nums[i] + nums[j]
-            if sum_of_two > target:
-                j -= 1
-            elif sum_of_two < target:
-                i += 1
-            else:
-                res.append([nums[i], nums[j]])
-                i += 1
-                j -= 1
-                while i < j and nums[i] == nums[i - 1]:
-                    i += 1
-                while i < j and nums[j] == nums[j + 1]:
-                    j -= 1
-
-        return res
-
-    def threeSum(self, nums, target, start, end):
-        res = []
-        for j in range(start, end - 1):
-            rest = target - nums[j]
-            candidates = self.twoSum(nums, rest, j + 1, len(nums) - 1)
-            if len(candidates) > 0:
-                # [[a,b],[c,d]]
-                # flatten it
-                for a,b in candidates:
-                    res.append([nums[j], a, b])
-        return res
-
-    def hash(self, list_of_nums):
-        h = 11 * list_of_nums[0]
-        for i in range(1, len(list_of_nums)):
-            h += list_of_nums[i]
-        return h
-
-    def has_dup(self, nums, list_of_nums):
-        for num in nums:
-            if num == list_of_nums:
-                return True
-        return False
-
     def fourSum(self, nums, target):
-        nums.sort()
-        res = {}
-        neg_res = set()
-        for i in range(len(nums) - 3):
-            rest = target - nums[i]
-            if rest in neg_res:
-                continue
-            candidates = self.threeSum(nums, rest, i + 1, len(nums) - 1)
-            if len(candidates) > 0:
-                #[[a,b,c],[e,f,g]]
-                for a,b,c in candidates:
-                    hash = self.hash([a, b, c])
-                    if hash in res:
-                        if self.has_dup(res[hash], [nums[i], a,b,c]):
+        m = defaultdict(list)
+        #get all product
+        for i in range(len(nums)):
+            for j in range(len(nums)):
+                if i == j:
+                    continue
+                m[nums[i] + nums[j]].append(sorted([i, j]))
+        res = set()
+        for s,lst in m.items():
+            exp = target - s
+            if exp in m:
+                for i1,j1 in m[s]:
+                    for i2,j2 in m[exp]:
+                        if i1 == i2 or i1 == j2 or i2 == j1 or j2 == j1:
                             continue
-                    if hash not in res:
-                        res[hash] = []
-                    res[hash].append([nums[i], a,b,c])
-            else:
-                neg_res.add(rest)
-        return list([item for k,items in res.items() for item in items])
+                        l = tuple(sorted([nums[i1], nums[j1],nums[i2], nums[j2]]))
+                        res.add(l)
+        return [[lst[0], lst[1], lst[2], lst[3] ] for lst in list(res)]
 
 
 sol = Solution()

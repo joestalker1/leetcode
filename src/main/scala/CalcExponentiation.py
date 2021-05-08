@@ -1,19 +1,18 @@
 def power(x, y):
-    base = x
-    exp = y
+    res = x
     if y < 0:
-        exp = -exp
+        y = -y
+    #stash odd number of power
     c = 1
-    while exp > 1:
-        print("bu!")
-        if exp % 2 == 0:
-            base *= base
-            exp = exp // 2
+    while y > 1:
+        if y % 2 == 0:
+            res *= res
+            y = y // 2
         else:
-            c *= base
-            base *= base
-            exp = (exp - 1)//2
-    return c * base
+            c *= res
+            res *= res
+            y = (y - 1)//2
+    return c * res
 
 
 print(power(2, 15))
