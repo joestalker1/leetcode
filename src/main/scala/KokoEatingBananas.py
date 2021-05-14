@@ -1,27 +1,18 @@
 class Solution:
-    def minEatingSpeed(self, piles, H):
-        if not piles or H == 0:
-            return 0
-        k = max(piles)
+    def minEatingSpeed(self, piles, h: int) -> int:
         lo = 1
         hi = sum(piles)
-        while lo <= hi:
-            speed = lo + (hi - lo) // 2
-            hours = 0
-            for i in range(len(piles)):
-                if piles[i] <= speed:
-                    hours += 1
-                else:
-                    #eating piles
-                    hours += (piles[i] // speed)
-                    if piles[i] % speed != 0:
-                        hours += 1
-            if hours <= H:
-                k = min(speed, k)
-                hi = speed - 1
+
+        def can_eat(v):
+            return sum([(p - 1) // v + 1 for p in piles]) <= h
+
+        while lo < hi:
+            m = lo + (hi - lo) // 2
+            if can_eat(m):
+                hi = m
             else:
-                lo = speed + 1
-        return k
+                lo = m + 1
+        return lo
 
 sol = Solution()
 print(sol.minEatingSpeed(piles = [30,11,23,4,20], H = 6))#23
