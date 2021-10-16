@@ -1,45 +1,23 @@
-import random
+def kthSmallest(arr, k, lo, hi):
+    pivot = partition(arr, lo, hi)
+    if pivot == k:
+        return arr[k]
+    if pivot > k:
+        return kthSmallest(arr, k, lo, pivot - 1)
+    return kthSmallest(arr, k, pivot + 1, hi)
 
-
-def part(arr, l, r):
-    p = random.randint(l, r)
-    arr[r], arr[p] = arr[p], arr[r]
-    i = l
-    j = l
-    lst = arr[r]
-    while j < r:
-        if arr[j] < lst:
-            arr[i], arr[j] = arr[j], arr[i]
+def partition(arr, lo, hi):
+    p = arr[hi]
+    i = lo - 1
+    for j in range(lo, hi):
+        if p > arr[j]:
             i += 1
-        j += 1
-    arr[i], arr[r] = arr[r], arr[i]
-    return i
+            arr[i],arr[j]=arr[j],arr[i]
+    arr[i+1],arr[hi] = arr[hi],arr[i+1]
+    return i + 1
 
 
-def get_median(arr, k, l, r, ab):
-    if l <= r:
-        p = part(arr, l, r)
-        if p == k:
-            ab[1] = arr[p]
-            if ab[0] != -1:
-                return
-        elif p == k - 1:
-            ab[0] = arr[p]
-            if ab[1] != -1:
-                return
-        elif p >= k:
-            return get_median(arr, k, l, p - 1, ab)
-        else:
-            return get_median(arr, k, p + 1, r, ab)
+print(kthSmallest([5,5,5], 0, 0, 2))
 
 
-ab = [-1, -1]
-arr = [12, 3, 5, 7, 4, 26]
-n = len(arr)
 
-if n % 2 == 1:
-    get_median(arr, n // 2, 0, n - 1, ab)
-    print(ab[1])
-else:
-    get_median(arr, n // 2, 0, n - 1, ab)
-    print((ab[0] + ab[1]) // 2)

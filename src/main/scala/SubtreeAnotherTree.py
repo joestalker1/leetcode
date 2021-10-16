@@ -5,20 +5,24 @@ class TreeNode:
         self.right = None
 
 
-class Solution:
-    def compare(self, s, t):
-        if not s and not t:
-            return True
-        if not s or not t:
-            return False
-        return (s.val == t.val) and self.compare(s.left, t.left) and self.compare(s.right, t.right)
 
-    def isSubtree(self, s, t):
-        if not s and not t:
+
+class Solution:
+    def compare(self, root, sub_tree):
+        if not root and not sub_tree:
             return True
-        if not s or not t:
+        if not root or not sub_tree or root.val != sub_tree.val:
             return False
-        return (s.val == t.val and self.compare(s, t)) or self.compare(s.left, t) or self.compare(s.right, t)
+        return self.compare(root.left,sub_tree.left) and self.compare(root.right, sub_tree.right)
+
+    def isSubtree(self, root, sub_tree):
+        if not root and not sub_tree:
+            return True
+        if not root or not sub_tree or root.val != sub_tree.val:
+            return False
+        if self.compare(root, sub_tree):
+            return True
+        return self.compare(root.left, sub_tree.left) or self.compare(root.right, sub_tree.right)
 
 sol = Solution()
 root = TreeNode(1)

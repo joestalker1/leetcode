@@ -5,7 +5,7 @@ def combination(arr, k):
         if count == 0:
             ans.append(path)
             return
-        for i, a in enumerate(options):
+        for i,a in enumerate(options):
             comb(ans, path + [a], options[i + 1:], count - 1)
 
     comb(ans, [], arr, k)

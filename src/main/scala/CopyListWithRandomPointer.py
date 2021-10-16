@@ -6,27 +6,31 @@ class Node:
         self.random = random
 
 class Solution:
-    def __init__(self):
-        self.visited = {}
-
-    def copy_node(self, node):
-        if node:
-            if node in self.visited:
-                return self.visited[node]
-            self.visited[node] = Node(node.val, None, None)
-            return self.visited[node]
-        return None
-
     def copyRandomList(self, head: 'Node') -> 'Node':
         if not head:
             return head
-        p = head
-        new_head = self.copy_node(p)
-        while p:
-            new_head.next = self.copy_node(p.next)
-            new_head.random = self.copy_node(p.random)
-            new_head = new_head.next
-            p = p.next
-        return self.visited[head]
+        new_head = None
+        ptr = head
+        # create new list A->A'->B->B'...
+        while ptr:
+            ptr_next = ptr.next
+            ptr.next = Node(ptr.val,ptr_next)
+            if not new_head:
+                new_head = ptr.next
+            ptr = ptr_next
+        # set up random pointers for new list nodes
+        ptr = head
+        while ptr:
+            if ptr.random:
+                ptr.next.random = ptr.random.next
+            ptr = ptr.next.next
+        #reset intertwined lists
+        ptr = head
+        while ptr:
+            ptr_next = ptr.next
+            if ptr.next:
+                ptr.next = ptr.next.next
+            ptr = ptr_next
+        return new_head
 
 
