@@ -1,30 +1,30 @@
 class Solution:
-    def splitArray(self, nums, m):
-        if not nums or m == 0:
+    def splitArray(self, nums: List[int], m: int) -> int:
+        if not nums:
             return 0
-        lo = 0
-        hi = 0
-        for i in range(len(nums)):
-            hi += nums[i]
-            if nums[i] > lo:
-                lo = nums[i]
-        res = hi
-        while lo <= hi:
-            f = lo + (hi - lo) // 2
-            sum_nums = 0
-            cnt = 1
+
+        # if i can split array by <= m parts
+        def can_split(max_sum):
+            count = 1
+            cur_sum = 0
             for i in range(len(nums)):
-                if sum_nums + nums[i] > f:
-                    cnt += 1
-                    sum_nums = nums[i]
+                if cur_sum + nums[i] <= max_sum:
+                    cur_sum += nums[i]
                 else:
-                    sum_nums += nums[i]
-            if cnt <= m:
-                res = min(res, f)
-                hi = f - 1
+                    cur_sum = nums[i]
+                    count += 1
+            return count <= m
+
+        lo = max(nums)
+        hi = sum(nums) + 1
+        while lo < hi:
+            max_sum = lo + (hi - lo) // 2
+            # if it can split,so try to take lesser max_sum
+            if can_split(max_sum):
+                hi = max_sum
             else:
-                lo = f + 1
-        return res
+                lo = max_sum + 1
+        return lo
 
 
 

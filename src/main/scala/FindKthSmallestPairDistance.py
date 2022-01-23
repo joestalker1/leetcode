@@ -1,41 +1,39 @@
-from typing import List
-import heapq, collections
+class Solution:
+    def smallestDistancePair(self, nums, k: int) -> int:
+        # assert self._smallestDistancePair([],2) == 0, 'empty array'
+        # assert self._smallestDistancePair([1,1,2],2) == 1,'2 pairs'
+        # assert self._smallestDistancePair([1,3,4],2) == 2, '1 pair'
+        return self._smallestDistancePair(nums, k)
 
-def smallDistancePair(nums: List[int], k: int) -> int:
-    """
-    Function statement: return the pair's distance that is kth smallest
-    Time complexity: O((n + k)log(n))
-    Worst case: O(n^2log(n)) <- when k is large
-    :param nums: all the possible pairing numbers
-    :param k: target
-    :return: kth smallest distance
-    """
-    # 1. Sort the nums array
-    nums.sort()
+    def _smallestDistancePair(self, nums, k: int):
+        if not nums or len(nums) * (len(nums) - 1) // 2 < k:
+            return 0
 
-    # 2. Get numbers' frequencies
-    freq = collections.Counter(nums)
-    keys = sorted(list(freq.keys()))
+        def feasible(dist):
+            l = 0
+            r = 0
+            # count pairs which distance is <= dist
+            pairs = 0
+            while l < len(nums) or r < len(nums):
+                # fast
+                while r < len(nums) and nums[r] - nums[l] <= dist:
+                    r += 1
+                # count pairs in [l:r]
+                pairs += r - l - 1
+                l += 1
+            return pairs >= k
+            # sort items to count pairs with distance <= mid
 
-    # 3. Store n-1 sorted lists in a binary heap
-    minHeap = [(keys[i + 1] - keys[i], i, i + 1) for i in range(len(keys) - 1)]
-    heapq.heapify(minHeap)
+        nums.sort()
+        lo = 0
+        hi = max(nums) - min(nums)
+        while lo < hi:
+            mid = lo + (hi - lo) // 2
+            if feasible(mid):
+                hi = mid
+            else:
+                lo = mid + 1
+        return lo
 
-    # 4. Count how many pairs' distance are 0
-    cnt, rtn = 0, 0
-    for key, val in freq.items():
-        cnt += (val - 1) * val // 2
-
-    # 5. Merge (len(nums) - 1) sorted lists
-    while len(minHeap) > 0 and cnt < k:
-        #  6. Pop the first k smallest pairs
-        rtn, i, j = heapq.heappop(minHeap)
-        k1, k2 = keys[i], keys[j]
-        cnt += (freq[k1] * freq[k2])
-        if j + 1 < len(keys):
-            heapq.heappush(minHeap, (keys[j + 1] - keys[i], i, j + 1))
-
-    # 7. Return the k-th smallest pair's distance
-    return rtn
-
-print(smallDistancePair([0, 0, 0, 0, 1, 1, 1, 2, 2, 2], k = 20))
+sol = Solution()
+print(sol.smallDistancePair([0, 0, 0, 0, 1, 1, 1, 2, 2, 2], k = 20))

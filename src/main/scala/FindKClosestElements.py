@@ -1,3 +1,6 @@
+import bisect
+
+
 class Solution:
     def findClosestElements(self, arr: List[int], k: int, x: int) -> List[int]:
         assert self._findClosestElements([1, 2, 3], 3, 1) == [1, 2, 3], 'ascending array'
@@ -10,7 +13,7 @@ class Solution:
     def _findClosestElements(self, arr: List[int], k: int, x: int) -> List[int]:
         if not arr or len(arr) <= k:
             return arr
-
+        bisect.bisect_right()
         def find_closest(arr, k, x):
             s = 0
             e = len(arr) - k

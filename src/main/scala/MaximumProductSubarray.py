@@ -1,25 +1,25 @@
 class Solution:
     def maxProduct(self, nums):
+        assert self._maxProduct([1,2]) == 2, 'positive nums'
+        assert self._maxProduct([1,-2,3]) == 3, '1 negative nums'
+        assert self._maxProduct([1,-2,-3]) == 6, 'even number of negative nums'
+        assert self._maxProduct([1, 0, -3]) == 1, 'even number of negative nums'
+        assert self._maxProduct([-1,2,2,-1,-3]) == 12, 'even number of negative nums'
+        return self._maxProduct(nums)
+
+    def _maxProduct(self, nums):
         if not nums:
             return None
-        max_val = 1
-        min_val = 1
-        max_prod = float('-inf')
-
-        for i in range(len(nums)):
-            if nums[i] > 0:
-                max_val *= nums[i]
-                min_val = min(1, min_val * nums[i])
-            elif nums[i] == 0:
-                min_val = 1
-                max_val = 0
-            elif nums[i] < 1:
-                prevMax = max_val
-                max_val = min_val * nums[i]
-                min_val = prevMax * nums[i]
-            max_prod = max(max_prod, max_val)
-            if max_val <= 0:
-                max_val = 1
+        #kadane algo
+        max_so_far = 1
+        # negative to negative gives positive
+        min_so_far = 1
+        max_prod = -inf
+        for num in nums:
+            temp_max = max(num, num*max_so_far,num*min_so_far)
+            min_so_far = min(num, num*max_so_far, num * min_so_far)
+            max_so_far = temp_max
+            max_prod = max(max_prod, max_so_far)
         return max_prod
 
 

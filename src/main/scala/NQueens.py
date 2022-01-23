@@ -1,29 +1,34 @@
-def n_queens(n, board=[]):
-    if n == len(board):
-        return 1
-
-    count = 0
-    for col in range(n):
-        board.append(col)
-        if is_valid(board):
-            count += n_queens(n, board)
-        board.pop()
-    return count
-
-def is_valid(board):
-    current_queen_row = len(board) - 1
-    # set up last col
-    current_queen_col = board[-1]
-    # Iterate over all already-placed queens and check if any of them can attack
-    # each other.
-    # take all except last item
-    for row, col in enumerate(board[:-1]):
-        # if col == current_queen_col it will be breach
-        # or current_col - col == current_row - row the queen is atacked by other one.
-        diff = abs(current_queen_col - col)
-        if diff == 0 or diff == current_queen_row - row:
-            return False
-    return True
-
-
-print(n_queens(5))
+class Solution:
+    def solveNQueens(self, n: int) -> List[List[str]]:
+        def valid(rows, diag, anti_diag,row,col):
+            if col == 0:
+                return True
+            if row in rows or (row-col) in diag or (row + col) in anti_diag:
+                  return False
+            return True
+        sol = []
+        def backtrack(rows,diag,anti_diag,state, col):
+            if col == n:
+                board = []
+                for i in range(n):
+                    board.append(''.join(state[i]))
+                sol.append(board)
+                return
+            for row in range(n):
+                if row in rows or (row-col) in diag or (row + col) in anti_diag:
+                    continue
+                rows.add(row)
+                diag.add(row-col)
+                anti_diag.add(row+col)
+                state[row][col] = 'Q'
+                backtrack(rows, diag, anti_diag, state, col+1)
+                rows.remove(row)
+                diag.remove(row - col)
+                anti_diag.remove(row + col)
+                state[row][col] = '.'
+        rows = set()
+        diag = set()
+        anti_diag = set()
+        state = [['.']* n for _ in range(n)]
+        backtrack(rows,diag,anti_diag, state,0)
+        return sol
