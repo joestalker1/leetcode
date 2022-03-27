@@ -1,7 +1,7 @@
 class DiningPhilosophers
 {
     private Lock forks[] = new Lock[5];
-    #philosopher count can eat at the same time
+    //philosopher number can eat,
     private Semaphore semaphore = new Semaphore(4);
 
     public DiningPhilosophers()
@@ -30,7 +30,7 @@ class DiningPhilosophers
                            Runnable putLeftFork,
                            Runnable putRightFork) throws InterruptedException
     {
-        //index of fork philosopher can take
+        //index of forks philosopher can take
         int leftFork = philosopher;
         int rightFork = (philosopher + 4) % 5;
 

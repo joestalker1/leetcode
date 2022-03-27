@@ -4,9 +4,9 @@ class NQueens:
         self.lineCounter = 0
 
     def place(self, queen, row):
-        for prev in range(1, queen): #number queens
-            #if some queen in column prev tales row?
-            if self.x[prev] == row or abs(self.x[prev] - row) == abs(prev - queen):
+        for q in range(1, queen): #number queens
+            #if a queen has the same row or the same diagonal?
+            if self.x[q] == row or abs(self.x[q] - row) == abs(q - queen):
                 return False
         return True
 

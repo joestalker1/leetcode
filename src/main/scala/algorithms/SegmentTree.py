@@ -6,10 +6,13 @@ class SegmentTree:
         self.arr_len = len(arr)
         self.tree = [0] * (2 * self.arr_len)
         # lazy applying changes
+        #update for every leave
         self.d = [inf] * self.arr_len
         self.h = floor(log2(self.arr_len)) + 1
+        #fill up the leaves
         for i in range(self.arr_len):
             self.tree[i + self.arr_len] = arr[i]
+        #fill up the inner nodes
         self.build(self.arr_len)
 
     def build(self, p):
@@ -27,12 +30,12 @@ class SegmentTree:
                 self.d[i] = inf
             s -= 1
 
-    def apply(self,p, val, k):
+    def apply(self, p, val):
         self.tree[p] += val
         if p < self.arr_len:
             self.d[p] += val
 
-    def inc(self, l,r, val):
+    def inc(self, l, r, val):
         l += self.arr_len
         r += self.arr_len
         l0 = l

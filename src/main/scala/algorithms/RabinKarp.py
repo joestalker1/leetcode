@@ -1,21 +1,62 @@
-from collections import defaultdict
+# Following program is the python implementation of
+# Rabin Karp Algorithm given in CLRS book
 
-class RabinKarp:
-    def search(L, a, n, nums, s):
-        MOD = 10**9 + 7
-        h = 0
-        for i in range(L):
-            h = (h * a + nums[i]) % MOD
+# d is the number of characters in the input alphabet
+d = 256
+q = 10** 9 + 7
+# pat  -> pattern
+# txt  -> text
+# q    -> A prime number
 
-        seen = defaultdict(list)
-        seen[h].append(0)
-        al = pow(a, L, MOD)
-        for start in range(1, n - L + 1):
-            h = (h * (a - nums[start - 1] * al) + nums[start + L - 1]) % MOD
+def search(pat, txt):
+    M = len(pat)
+    N = len(txt)
 
-            if h in seen:
-                cur_s = s[start:start + L]
-                if any(cur_s == s[i:i + L] for i in seen[h]):
-                    return start
-            seen[h].append(start)
-        return -1
+    j = 0
+    p = 0    # hash value for pattern
+    t = 0    # hash value for txt
+    h = 1
+
+    # The value of h would be "pow(d, M-1)%q"
+    for i in range(M-1):
+        h = (h * d) % q
+
+    # Calculate the hash value of pattern and first window
+    # of text
+    for i in range(M):
+        p = (d*p + ord(pat[i]))%q
+        t = (d*t + ord(txt[i]))%q
+
+    # Slide the pattern over text one by one
+    for i in range(N-M+1):
+        if p == t:
+            # Check for characters one by one
+            for j in range(M):
+                if txt[i+j] != pat[j]:
+                    break
+                else:
+                    j+=1
+
+            # if p == t and pat[0...M-1] = txt[i, i+1, ...i+M-1]
+            if j == M:
+                print ("Pattern found at index " + str(i))
+
+        # Calculate hash value for next window of text: Remove
+        # leading digit, add trailing digit
+        if i < N - M:
+            t = (d*(t - ord(txt[i]) * h) + ord(txt[i + M])) % q
+
+            # We might get negative values of t, converting it to
+            # positive
+            if t < 0:
+                t = t + q
+
+# Driver Code
+txt = "GEEKS FOR GEEKS"
+pat = "GEEK"
+
+# A prime number
+
+
+# Function Call
+search(pat,txt)

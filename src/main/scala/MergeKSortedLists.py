@@ -5,23 +5,22 @@ class ListNode:
     def __init__(self, val=0, next=None):
         self.val = val
         self.next = next
+# [[-1,1],[-3,1,4],[-2,-1,0,2]]
 class Solution:
     def mergeKLists(self, lists):
         min_heap = []
         for lst in lists:
-            head = lst
-            while head:
-                heappush(min_heap, head.val)
-                head = head.next
-        head = ListNode(-1)
-        node = head
+            if lst:
+                heappush(min_heap, (lst.val, lst))
+        p = sorted_lst = ListNode(-1)
         while min_heap:
-            a = heappop(min_heap)
-            node.next = ListNode(a)
-            node = node.next
-        return head.next
-# [[-1,1],[-3,1,4],[-2,-1,0,2]]
-
+            (val, lst) = heappop(min_heap)
+            p.next = ListNode(val)
+            p = p.next
+            lst = lst.next
+            if lst:
+                heappush(min_heap, (lst.val, lst))
+        return sorted_lst.next
 def makeList(arr):
     head = ListNode(-1)
     node = head

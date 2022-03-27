@@ -7,7 +7,7 @@ def bellmanFord(adj, n):
             dist[v] = min(dist[v], dist[u] + w)
     for u in range(1, n + 1):
         for (v,w) in adj[u]:
-            if dist[u] + w < dist[w]:
+            if dist[u] + w < dist[v]:
                 print(f'Found negative cycle $u -> $v')
 
     return dist
