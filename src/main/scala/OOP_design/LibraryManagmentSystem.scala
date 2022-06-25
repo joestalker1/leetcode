@@ -16,44 +16,44 @@ class AccountStatus {
 
 class Address{
    var streetAdress:String,
-   var city:Strig,
+   var city:String,
    var zipCode:String,
-   country: String,
-   state: String
+   val country: String,
+   val state: String
 }
 class Person {
-   name:String,
-   address: Address,
-   email:String,
-   phone: String
+   val name:String,
+   val address: Address,
+   val email:String,
+   val phone: String
 }
 class Author{
-   name:String
-   description: String
-   books:List[Book]
+   val name:String
+   val description: String
+   val books:List[Book]
 }
 
 class Book {
-   isbn:String,
-   title:String,
-   subject:String
-   publisher:String
-   language: String,
-   numberOfPages:Int
-   authors: List[Author]
+   val isbn:String,
+   val title:String,
+   val subject:String
+   val publisher:String
+   val language: String,
+   val numberOfPages:Int
+   val authors: List[Author]
 }
 
 class BookItem extends Book {
-   barcode: String,
-   isReferenceOnly: boolean,
-   borrowed: Date,
-   dueDate: Date,
-   price: Double,
-   format: BookFormat,
-   status: BookStatus,
-   dateOfPurchase: Date,
-   publicationDate: Date,
-   placeAt: Rack
+   val barcode: String,
+   val isReferenceOnly: boolean,
+   val borrowed: Date,
+   val dueDate: Date,
+   val price: Double,
+   val format: BookFormat,
+   val status: BookStatus,
+   val dateOfPurchase: Date,
+   val publicationDate: Date,
+   val placeAt: Rack
 
   def checkout(String memberId): Bool = {
     if(bookItem.getIsReferenceOnly()) {
@@ -82,8 +82,8 @@ class Library {
 
 class Account {
    val id:String,
-   status: AccountStatus,
-   person: Person,
+   val status: AccountStatus,
+   val person: Person,
    def resetPassword():Unit
 }
 
@@ -94,8 +94,8 @@ class Librarian extends Account {
 }
 
 class Member extends Account {
-   dateOfMember: Date,
-   totalBooksCheckedout: Int,
+   val dateOfMember: Date,
+   val totalBooksCheckedout: Int,
 
    def reserveBookItem(bookItem: BookItem):Unit
 
@@ -124,7 +124,7 @@ class Member extends Account {
     return true;
   }
 
-  private def checkForFine(String bookItemBarcode): Unit = {
+  private def checkForFine(bookItemBarcode:String): Unit = {
     val bookLending = BookLending.fetchLendingDetails(bookItemBarcode);
     val dueDate = bookLending.getDueDate();
     val today = new Date();
@@ -148,8 +148,8 @@ class Member extends Account {
   }
 
   def renewBookItem(BookItem bookItem): Bool = {
-    this.checkForFine(bookItem.getBarcode());
-    val bookReservation = BookReservation.fetchReservationDetails(bookItem.getBarcode());
+    this.checkForFine(bookItem.getBarcode())
+    val bookReservation = BookReservation.fetchReservationDetails(bookItem.getBarcode())
     // check if this book item has a pending reservation from another member
     if (bookReservation != null && bookReservation.getMemberId() != this.getMemberId()) {
       ShowError("This book is reserved by another member");

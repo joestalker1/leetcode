@@ -1,31 +1,14 @@
-class NumMatrix(object):
+class NumMatrix:
     def __init__(self, matrix):
-        self.aux = [0] * len(matrix)
-        for i in range(len(matrix)):
-            self.aux[i] = [0] * len(matrix[0])
-        for j in range(len(matrix[0])):
-            self.aux[0][j] = matrix[0][j]
-
-        for i in range(1, len(self.aux)):
-            for j in range(len(self.aux[i])):
-                self.aux[i][j] = matrix[i][j] + self.aux[i-1][j]
-
-        for i in range(len(self.aux)):
-            for j in range(1, len(self.aux[i])):
-                self.aux[i][j] += self.aux[i][j - 1]
-
+        n = len(matrix)
+        m = len(matrix[0])
+        self.dp = [[0] * (m+1) for _ in range(n+1)]
+        for i in range(n):
+            for j in range(m):
+                self.dp[i+1][j+1] = self.dp[i+1][j] + self.dp[i][j+1] + matrix[i][j] - self.dp[i][j]
 
     def sumRegion(self, row1, col1, row2, col2):
-        if 0 == len(self.aux) or 0 == len(self.aux[0]):
-            return 0
-        sum_reg = self.aux[row2][col2]
-        if row1 - 1 >= 0:
-            sum_reg -= self.aux[row1-1][col2]
-        if col1 - 1 >= 0:
-            sum_reg -= self.aux[row2][col1 - 1]
-        if row1 - 1 >= 0 and col1 - 1 >= 0:
-            sum_reg += self.aux[row1-1][col1-1]
-        return sum_reg
+        return self.dp[row2+1][col2+1] - self.dp[row1][col2+1] - self.dp[row2+1][col1] + self.dp[row1][col1]
 
 
 num_matrix = NumMatrix([[[]]])

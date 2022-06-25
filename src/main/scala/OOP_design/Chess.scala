@@ -14,7 +14,7 @@ case class Board(boxes:Array[Array[Spot]]) {
   reset()
 
   def getSpot(row:Int,col:Int):Option[Spot] = {
-      if(row > 7 || row < 0 || col < 0 || colr > 7)
+      if(row > 7 || row < 0 || col < 0 || col > 7)
          None
       else Option(boxes(row)(col))
   }
@@ -131,8 +131,8 @@ case class Move(player: Player, start: Spot, end:Spot,killedMove:Boolean = false
 }
 
 case class CastlingMove(player:Player, start: Spot,end: Spot) {
-     val newStartSpot = Spot(start.row,start.end,end.getPiece())
-     val newEndSpot =  Spot(end.row,end.end,start.getPiece())
+     val newStartSpot = Spot(start.row,start.col,end.getPiece())
+     val newEndSpot =  Spot(end.row,end.col,start.getPiece())
 }
 
 

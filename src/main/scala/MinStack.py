@@ -1,45 +1,39 @@
-class MinStack:
-    def __init__(self):
-        # store minimum value
-        self.min_val = 0
-        self.stack = []
+class MinStack(object):
 
-    def push(self, x):
-        if len(self.stack) == 0:
-            #if stack is empty, our min value is x
-            self.stack.append(x)
-            self.min_val = x
-        elif x < self.min_val:
-            # if x is new min value, encode old min value as 2*x - current min_val
-            y = 2 * x - self.min_val
-            # push it to stack
-            self.stack.append(y)
-            # assigne new min value
-            self.min_val = x
+    def __init__(self):
+        self.st = []
+        self.min = None
+
+    def push(self, val):
+        if not self.st:
+            self.st.append(val)
+            self.min = val
+        elif val < self.min:
+            enc = 2 * val - self.min
+            # min = 2 * val - enc
+            self.st.append(enc)
+            self.min = val
         else:
-            # otherwise push value to stack
-            self.stack.append(x)
+            self.st.append(val)
 
     def pop(self):
-        if len(self.stack) == 0:
+        if not self.st:
             return
-        y = self.stack.pop()
-        # if y is < current min value, decode it as new min value
-        if y < self.min_val:
-            # new min item
-            self.min_val = 2 * self.min_val - y
-
+        x = self.st.pop()
+        if x < self.min:
+            self.min = 2 * self.min - x
 
     def top(self):
-        if self.stack[-1] < self.min_val:
-            return self.min_val
-        return self.stack[-1]
+        if not self.st:
+            return None
+        if self.st[-1] < self.min:
+            return self.min
+        return self.st[-1]
 
     def getMin(self):
-        if len(self.stack) == 0:
+        if not self.st:
             return None
-        return self.min_val
-
+        return self.min
 
 minStack = MinStack()
 

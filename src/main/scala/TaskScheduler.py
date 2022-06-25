@@ -1,22 +1,22 @@
+from heapq import heappop, heappush,heapify
+from collections import Counter
+
 class Solution:
-    def leastInterval(self, tasks, n):
-        if not tasks or len(tasks) == 0:
-            return 0
-        arr = [0] * 26
-        for ch in tasks:
-            arr[ord(ch) - ord('A')] += 1
-        arr = sorted(arr)
+    def leastInterval(self, tasks, n: int) -> int:
         time = 0
-        while arr[25] > 0:
-            i = 0
-            while i <= n:
-                if arr[25] == 0:
-                    break
-                if i < 26 and arr[25 - i] > 0:
-                    arr[25 - i] -= 1
-                i += 1
-                time += 1
-            arr = sorted(arr) # 26 log 26
+        q = [(-f,t) for t,f in Counter(tasks).items()]
+        heapify(q)
+        st = []
+        while q:
+            for _ in range(n+1):
+                if q or st:
+                    time += 1
+                if q:
+                    f,t = heappop(q)
+                    if f < -1:
+                        st.append((f+1, t))
+            while st:
+                heappush(q, st.pop())
         return time
 
 # 16

@@ -1,38 +1,26 @@
 class Solution:
-    def is_digit(self, ch):
-        return '0' <= ch <= '9'
-
-    def myAtoi(self, str: 'str') -> 'int':
-        if not str or len(str) == 0:
-            return 0
-        min_int = pow(-2, 31)
-        max_int = pow(2, 31) - 1
-        chars = []
-        for ch in str:
-            if ch == '+' or ch == '-':
-                if len(chars) > 0:
-                    break
-                chars.append(ch)
-            elif ch == ' ' and len(chars) == 0:
-                continue
-            elif self.is_digit(ch):
-                chars.append(ch)
-            else:
-                break
+    def myAtoi(self, s: str) -> int:
+        sign = 1
         num = 0
-        b = 1
-        while len(chars) > 0:
-            a = chars.pop()
-            if a == '-':
-                num *= -1
-            elif self.is_digit(a):
-                num += (ord(a) - ord('0')) * b
-                b *= 10
-        if num > max_int:
-            return max_int
-        if num < min_int:
-            return min_int
-        return num
+        i = 0
+        INT_MIN = -2 ** 31
+        INT_MAX = 2 ** 31 - 1
+        i = 0
+        while i < len(s) and s[i] == ' ':
+            i += 1
+        if i < len(s) and s[i] == '-':
+            sign = -1
+            i += 1
+        elif i < len(s) and s[i] == '+':
+            sign = 1
+            i += 1
+        while i < len(s) and s[i].isdigit():
+            d = int(s[i])
+            if num > INT_MAX // 10 or num == INT_MAX // 10 and INT_MAX % 10 < d:
+                return INT_MAX if sign == 1 else INT_MIN
+            num = num * 10 + d
+            i += 1
+        return num * sign
 
 
 sol = Solution()

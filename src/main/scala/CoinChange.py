@@ -1,26 +1,30 @@
-import math
-
+from math import inf
 
 class Solution:
     def coinChange(self, coins, amount):
-        m = [[0] * (amount + 1) for _ in range(len(coins) + 1)]
+        # assert self._coinChange([2,1,1], 3) == 2,'test1'
+        # assert self._coinChange([5], 3) == -1, 'test2'
+        return self._coinChange(coins, amount)
+
+    def _coinChange(self, coins, amount):
+        if not coins or amount <= 0:
+            return 0
+        coins.sort()
+        coin_num = [inf] * (amount + 1)
+        for coin in coins:
+            if coin > amount:
+                break
+            coin_num[coin] = 1
+        if coin_num[amount] == 1:
+            return coin_num[amount]
         for i in range(1, amount + 1):
-            # if there is no coins, then there is infinity ways to make i
-            m[0][i] = math.inf
-        # go by row
-        for c in range(1, len(coins) + 1):
-            # for every amount
-            for r in range(1, amount + 1):
-                # coin's denomination is r
-                if coins[c - 1] == r:
-                    m[c][r] = 1
-                # if coin's denomination is greater r, than take ways from previous coin
-                elif coins[c - 1] > r:
-                    m[c][r] = m[c - 1][r]
-                else:
-                    # min: 1) without this coin,2) with this coin
-                    m[c][r] = min(m[c - 1][r], 1 + m[c][r - coins[c - 1]])
-        return m[-1][-1] if m[-1][-1] != math.inf else -1
+            if coin_num[amount] != inf:
+                continue
+            for coin in coins:
+                if i < coin:
+                    break
+                coin_num[i] = min(coin_num[i], coin_num[i - coin] + 1)
+        return coin_num[amount] if coin_num[amount] != inf else -1
 
 
 sol = Solution()

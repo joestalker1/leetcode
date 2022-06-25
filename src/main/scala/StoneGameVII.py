@@ -8,15 +8,16 @@ class Solution:
 
         n = len(stones)
         dp = [[0] * n for _ in range(n)]
+        #dp[i][j] =
         for l in range(2, n + 1):
             for i in range(n):
                 j = i + l - 1
                 if j >= n:
                     break
-                sc1 = pref_sum[j+1] - pref_sum[i+1]
-                sc2 = pref_sum[j] - pref_sum[i]
+                score_remove_first = pref_sum[j+1] - pref_sum[i+1]
+                score_remove_last = pref_sum[j] - pref_sum[i]
 
-                dp[i][j] = max(sc1 - dp[i+1][j], sc2 - dp[i][j-1])
+                dp[i][j] = max(score_remove_first - dp[i+1][j], score_remove_last - dp[i][j-1])
         return dp[0][n-1]
 
 

@@ -20,8 +20,9 @@ class Solution:
                 nodes.append(node.val)
             leaves(node.left, nodes)
             leaves(node.right, nodes)
-
-        res = [root.val]
+        res = []
+        if not is_leaf(root):
+            res.append(root.val)
         t = root.left
         while t:
             if not is_leaf(t):

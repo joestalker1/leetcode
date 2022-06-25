@@ -12,7 +12,6 @@ class FenwickTree:
     def sum(self, i):
         s = 0
         i += 1
-
         while i > 0:
             s += self.tree[i]
             i -= i & (-i)
