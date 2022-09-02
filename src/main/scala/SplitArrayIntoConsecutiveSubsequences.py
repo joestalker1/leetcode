@@ -1,31 +1,27 @@
-from collections import defaultdict
+from collections import defaultdict,Counter
 
 class Solution:
-    def isPossible(self, nums):
-        av = defaultdict(int)
-        # count subsequence value
-        want = defaultdict(int)
-        for a in nums:
-            av[a] += 1
+    def isPossible(self, nums) -> bool:
+        if len(nums) < 3:
+            return False
+        # store last item freq of subseq an
+        subseq = defaultdict(int)
+        freq = Counter(nums)
         for i in range(len(nums)):
-            a = nums[i]
-            # no available values
-            if av[a] <= 0:
+            if freq[nums[i]] == 0:
                 continue
-            # if some suqsequence needs to have a
-            if want[a] > 0:
-                av[a] -= 1
-                # mark that we've used a
-                want[a] -= 1
-                # request next value
-                want[a+1] += 1
-            # if it has minimal subsequence
-            elif av[a] > 0 and av[a+1] > 0 and av[a+2] > 0:
-                av[a] -= 1
-                av[a+1] -= 1
-                av[a+2] -= 1
-                # request next value
-                want[a+3] += 1
+            # consider if nums[i] is last item in existing subseq or start item in new subsequence
+            if subseq[nums[i] - 1] > 0:
+                # decrease number of subseq ending by nums[i] - 1
+                subseq[nums[i] - 1] -= 1
+                # increase number by subseq ending by nums[i]
+                subseq[nums[i]] += 1
+            # if exist at least 3 lenght subsequence
+            elif freq[nums[i] + 1] > 0 and freq[nums[i] + 2] > 0:
+                subseq[nums[i] + 2] += 1
+                freq[nums[i] + 1] -= 1
+                freq[nums[i] + 2] -= 1
             else:
                 return False
+            freq[nums[i]] -= 1
         return True

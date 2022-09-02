@@ -6,7 +6,7 @@ class Solution:
         i, j, dx, dy = 0, 0, 0, 1
         for k in range(n * n):
             A[i][j] = k + 1
-            print('{} {}'.format(dx,dy))
+            #print('{} {}'.format(dx,dy))
             if A[(i + dx) % n][(j + dy) % n]:
                 dx, dy = dy, -dx
             i += dx

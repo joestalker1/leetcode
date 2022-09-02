@@ -1,23 +1,30 @@
 class Solution:
-    def maxPoints(self, points: List[List[int]]) -> int:
-        rows = len(points)
-        cols = len(points[0])
-        dp = [-1] * cols
-        #firts row is just points[0]
-        for i in range(cols):
-            dp[i] = points[0][i]
-        left_max = [-1] * cols
-        right_max = [-1] * cols
-        for i in range(1, rows):
-            #new_dp = [-1] * cols
-            #calc max poins[i][j] + j from the left to the right
-            left_max[0] = dp[0]
-            right_max[-1] = dp[cols-1] - cols + 1
-            for j in range(1, cols):
-                left_max[j] = max(left_max[j-1], dp[j] + j)
-                k = cols - j - 1
-                right_max[k] = max(right_max[k+1], dp[k] - k)
-            #calc maximal points[j][j] - j from the right to the left
-            for j in range(cols):
-                dp[j] = max(left_max[j] - j,right_max[j] + j) + points[i][j]
-        return max(dp)
+    def maxPoints(self, points) -> int:
+        m = len(points)
+        n = len(points[0])
+        if m == 1:
+            return max(points[0])
+        if n == 1:
+            return sum(points[i][0] for i in range(m))
+
+        def left(arr):
+            lft = [arr[0]] + [0] * (n - 1)
+            for i in range(1, n):
+                lft[i] = max(lft[i - 1] - 1, arr[i])
+            return lft
+
+        def right(arr):
+            rgt = [0] * (n - 1) + [arr[-1]]
+            for i in range(n - 2, -1, -1):
+                rgt[i] = max(rgt[i + 1] - 1, arr[i])
+            return rgt
+
+        pre = points[0]
+        for i in range(1, m):
+            lft = left(pre)
+            rgt = right(pre)
+            cur = [0] * n
+            for j in range(n):
+                cur[j] = points[i][j] + max(lft[j], rgt[j])
+            pre = cur[:]
+        return max(cur[:])

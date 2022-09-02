@@ -1,29 +1,38 @@
-from collections import defaultdict
-
 class NumArray:
 
     def __init__(self, nums):
-        self.arr = nums
-        self.prefix = [0]
-        self.updates = defaultdict(int)
-        self.update_count = 0
+        #store sums
+        self.tree = [0] * (len(nums) + 1)
+        #store values
+        self.nums = nums
         for i in range(len(nums)):
-            self.prefix.append(self.prefix[-1] + nums[i])
+            self.init(i, nums[i])
 
+    def init(self, index: int, val: int) -> None:
+        index += 1
+        while index < len(self.tree):
+            self.tree[index] += val
+            index += index & (-index)
 
-    def update(self, i: int, val: int) -> None:
-        self.updates[i] = val
-        self.update_count += 1
-        # self.arr[i] = val
-        # for j in range(i, len(self.arr)):
-        #     self.prefix[j+1] += diff
+    def update(self, index, val):
+        diff = val - self.nums[index]
+        #set up new value
+        self.nums[index] = val
+        #update every values by diff
+        self.init(index, diff)
 
-    def sumRange(self, i, j):
-        #apply the earlier persisted updates
-        if self.update_count == 0:
-            return self.prefix[j+1] - self.prefix[i]
-        for i in range(self.updates):
-            self.arr[i] = self.u
+    def sum(self, index):
+        cur_sum = 0
+        index += 1
+        while index > 0:
+            cur_sum += self.tree[index]
+            index -= index & (-index)
+        return cur_sum
+
+    def sumRange(self, left: int, right: int) -> int:
+        if left > right:
+            return 0
+        return self.sum(right) - self.sum(left - 1)
 
 
 sol = NumArray([1,3,5])

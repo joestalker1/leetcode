@@ -55,7 +55,7 @@ def manipulated_seive(N):
             j += 1
 
 
-N = 13
+N = 10
 manipulated_seive(N)
 
 # print all prime number less then N

@@ -5,44 +5,23 @@ class ListNode:
          self.next = None
 
 class Solution:
-    def partition(self, head, x):
+    def partition(self, head, x: int):
         if not head:
-            return
-        min_p = None
-        e1 = None
-        max_p = None
-        e2 = None
-        cur = head
-        while cur:
-            if cur.val < x:
-                if not min_p:
-                    min_p = cur
-                    e1 = min_p
-                    cur = cur.next
-                    e1.next = None
-                else:
-                    e1.next = cur
-                    e1 = e1.next
-                    cur = cur.next
-                    e1.next = None
+            return head
+        before = before_head = ListNode(-1)
+        after = after_head = ListNode(-1)
+        p = head
+        while p:
+            if p.val < x:
+                before.next = p
+                before = before.next
             else:
-                if not max_p:
-                    max_p = cur
-                    e2 = max_p
-                    cur = cur.next
-                    e2.next = None
-                else:
-                    e2.next = cur
-                    e2 = e2.next
-                    cur = cur.next
-                    e2.next = None
-        if min_p and max_p:
-            e1.next = max_p
-            return min_p
-        if min_p:
-            return min_p
-        return max_p
-
+                after.next = p
+                after = after.next
+            p = p.next
+        before.next = after_head.next
+        after.next = None
+        return before_head.next
 
 list1 = ListNode(1)
 #list1.next = ListNode(1)

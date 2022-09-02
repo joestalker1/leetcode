@@ -1,26 +1,26 @@
-class Solution:
-    def canFinish(self, numCourses: int, prerequisites):
-        if not numCourses:
-            return False
-        graph = [[] for _ in range(numCourses)]
-        visit = [0 for i in range(numCourses)]
-        for i in range(len(prerequisites)):
-            graph[prerequisites[i][0]].append(prerequisites[i][1])
+from collections import defaultdict
 
-        def dfs(v, graph, visit):
-            if visit[v] == 1:
-                return True
-            if visit[v] == -1:
-                return False
-            visit[v] = -1
-            for u in graph[v]:
-                if not dfs(u, graph, visit):
-                    return False
-            visit[v] = 1
+class Solution:
+    def canFinish(self, numCourses: int, prerequisites) -> bool:
+        if not numCourses or not prerequisites:
             return True
 
-        for v in range(len(graph)):
-            if not dfs(v, graph, visit):
+        def find_cycle(adj_list, v, color):
+            if color[v] == 2:
+                return False
+            color[v] = 1
+            for nei in adj_list[v]:
+                if color[nei] == 1 or find_cycle(adj_list, nei, color):
+                    return True
+            color[v] = 2
+            return False
+
+        adj_list = defaultdict(list)
+        color = [0] * numCourses
+        for a, b in prerequisites:
+            adj_list[b].append(a)
+        for v in range(numCourses):
+            if find_cycle(adj_list, v, color):
                 return False
         return True
 

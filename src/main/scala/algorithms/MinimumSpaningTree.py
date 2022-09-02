@@ -15,6 +15,8 @@ class UnionFind:
     def unite(self, a, b):
         p1 = self.find(a)
         p2 = self.find(b)
+        if p1 == p2:
+            return
         if self.size[a] < self.size[b]:
             a, b = b, a
             self.size[a] += self.size[b]

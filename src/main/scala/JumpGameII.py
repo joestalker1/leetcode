@@ -1,28 +1,19 @@
-from heapq import heappop, heappush
-
 class Solution:
-    def jump(self, nums):
-        n = len(nums)
-        res = 0
-        q = [[-nums[0], 0]]
-        while q:
-            s, j = heappop(q)
-            if s == 0 or j == n - 1:
-                break
-            res += 1
-            s = -s
-            j = -j
-            if j + s >= n - 1:
-                break
-            while q and q[0][1] <= j:
-                heappop(q)
-            i = j + 1
-            while i < min(n, j + s + 1) and len(q) < s:
-                if nums[i]:
-                    heappush(q, [-nums[i], -i])
-                i += 1
-        return res
-
+    def jump(self, nums) -> int:
+        if len(nums) < 2:
+            return 0
+        steps = 0
+        i = 0
+        while i + nums[i] < len(nums) - 1:
+            max_next_step = 0
+            k = i
+            for j in range(i,i + nums[i] + 1):
+                if max_next_step < j + nums[j]:
+                    k = j
+                    max_next_step = j + nums[j]
+            i = k
+            steps += 1
+        return steps + 1
 
 sol = Solution()
 print(sol.jump([2,0,2,4,6,0,0,3]))#3

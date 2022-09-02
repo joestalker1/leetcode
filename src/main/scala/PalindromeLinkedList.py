@@ -1,29 +1,40 @@
-class ListNode:
-     def __init__(self, x):
-         self.val = x
-         self.next = None
-
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, val=0, next=None):
+#         self.val = val
+#         self.next = next
 class Solution:
-    def check(self, head, cur):
-        if not head.next:
-            return (cur.val == head.val, cur.next)
-        eq, next = self.check(head.next, cur)
-        return (eq and head.val == next.val, next.next)
-
-    def isPalindrome(self, head):
+    def isPalindrome(self, head) -> bool:
         if not head:
             return True
-        p1 = head
-        p2 = head
-        while p2.next:
-            p2 = p2.next
 
-        res = self.check(head, head)
-        return res[0]
+        def find_half(node):
+            fast = node
+            slow = node
+            while fast and fast.next:
+                slow = slow.next
+                fast = fast.next.next
+            return slow
 
+        def reverse_list(node):
+            prev = None
+            cur = node
+            while cur:
+                t = cur.next
+                cur.next = prev
+                prev = cur
+                cur = t
+            return prev
 
-l1 = ListNode(1)
-l1.next = ListNode(2)
-l1.next.next = ListNode(2)
-sol = Solution()
-print(sol.isPalindrome(l1))
+        head1 = find_half(head)
+        rev1 = reverse_list(head1)
+        run = True
+        a = rev1
+        b = head
+        while run and a and b:
+            if a.val != b.val:
+                run = False
+            a = a.next
+            b = b.next
+        head1.next = reverse_list(rev1)
+        return run
