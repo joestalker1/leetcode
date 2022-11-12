@@ -2,21 +2,28 @@ from collections import Counter
 from itertools import combinations,permutations
 
 class Solution:
-    def is_subseq(self, s, t):
-        it = iter(t)
-        return all(c in it for c in s)
+    def is_subseq(self, subseq,s):
+        i = 0
+        for c in subseq:
+            i = s.find(c,i)
+            if i == -1:
+                return False
+            i += 1
+        return True
+        #return all(c in it for c in subseq)
 
     def longestSubsequenceRepeatedK(self, s, k):
-        hot = ''.join(ch * (freq//k) for ch,freq in Counter(s).items())
+        char_freq = Counter(s)
+        cand_chars = ''.join(ch * (freq//k) for ch,freq in char_freq.items())
         combs = set()
-        for l in range(len(hot) + 1):
-            for comb in combinations(hot, l):
+        for l in range(len(cand_chars) + 1):
+            for comb in combinations(cand_chars, l):
                 for perm in permutations(comb):
                     combs.add(''.join(perm))
-        sorted_cand =sorted(combs, key=lambda x:(len(x),x),reverse=True)
-        for cand in sorted_cand:
-            if self.is_subseq(cand * k, s):
-                return cand
+        sorted_comb = sorted(combs, key=lambda x:[len(x),x],reverse=True)
+        for comb in sorted_comb:
+            if self.is_subseq(comb*k,s):
+                return comb
 
 
 

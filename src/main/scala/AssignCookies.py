@@ -1,34 +1,24 @@
-def quick_sort(arr, i, j):
-    if i < j:
-        pivot = arr[i]
-        k = i
-        i += 1
-        l = k + 1
-        while l <= j:
-            if arr[l] >= pivot:
-                arr[i], arr[l] = arr[l], arr[i]
-                i += 1
-            l += 1
-        t = arr[i - 1]
-        arr[i - 1] = pivot
-        arr[k] = t
-        quick_sort(arr, k, i - 2)
-        quick_sort(arr, i, j)
-
 class Solution:
-    def findContentChildren(self, g, s):
+    def findContentChildren(self, g: List[int], s: List[int]) -> int:
+        # assert self._findContentChildren([], []) == 0,'test1'
+        # assert self._findContentChildren([1],[1]) == 1,'test2'
+        # assert self._findContentChildren([3,4],[1,2]) == 0,'test3'
+        # assert self._findContentChildren([1,2,3],[1,1]) == 1,'test4'
+        return self._findContentChildren(g, s)
+
+    def _findContentChildren(self, g: List[int], s: List[int]) -> int:
         if not g or not s:
             return 0
-        quick_sort(g, 0, len(g) - 1)
-        quick_sort(s, 0, len(s) -1)
-        last_cookie = -1
-        res = 0
-        for greed in g:
-            j = last_cookie + 1
-            if 0 <= j < len(s) and greed <= s[j]:
-                last_cookie = j
-                res += 1
-        return res
+        content_children = 0
+        g.sort()
+        s.sort()
+        i = 0
+        j = 0
+        while i < len(g) and j < len(s):
+            if g[i] <= s[j]:
+                i += 1
+            j += 1
+        return i
 
 
 sol = Solution()

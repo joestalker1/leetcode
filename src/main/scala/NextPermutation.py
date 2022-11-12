@@ -3,12 +3,13 @@ class Solution(object):
         if not nums:
             return
         i = len(nums) - 2
-        # find first decreasing item
-        while i >= 0 and nums[i + 1] <= nums[i]:
+        # find first increasing order item nums[i] < nums[i+1]
+        while i >= 0 and nums[i] >= nums[i+1]:
             i -= 1
         if i >= 0:
             # find the least bigger item
             j = len(nums) - 1
+            #find leftmost nums[j] > nums[i]
             while j >= 0 and nums[j] <= nums[i]:
                 j -= 1
             nums[i],nums[j] = nums[j], nums[i]

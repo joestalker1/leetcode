@@ -11,6 +11,7 @@ class DetectSquares:
     def count(self, point) -> int:
         x1, y1 = point
         square_cnt = 0
+        #consider (x1,y1) and (x3,y3) as diagonal points
         for (x3, y3), cnt3 in self.freq.items():
             if abs(x3 - x1) == 0 or abs(x3 - x1) != abs(y3 - y1):
                 continue
