@@ -8,4 +8,6 @@ def find_max_subarr(arr):
         max_val = max(max_val, sum)
     return max_val
 
+
+print(find_max_subarr([-1,2,3,-2,5]))
 print(find_max_subarr([2,-3,4,9,0]))

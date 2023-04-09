@@ -1,19 +1,24 @@
 class Solution:
     def jump(self, nums) -> int:
+        # assert self._jump([2,3,1,1,4]) == 2,'test1'
+        # assert self._jump([2,3,0,1,4]) == 2, 'test2'
+        return self._jump(nums)
+
+    def _jump(self, num) -> int:
         if len(nums) < 2:
             return 0
-        steps = 0
-        i = 0
-        while i + nums[i] < len(nums) - 1:
-            max_next_step = 0
-            k = i
-            for j in range(i,i + nums[i] + 1):
-                if max_next_step < j + nums[j]:
-                    k = j
-                    max_next_step = j + nums[j]
-            i = k
-            steps += 1
-        return steps + 1
+        #previous value of cur_far
+        cur_end = 0
+        #if i reaches cur_end, we need to make a jump.
+        #cur_far is max next jump
+        cur_far = 0
+        jumps = 0
+        for i in range(len(nums)-1):
+            cur_far = max(cur_far, i + nums[i])
+            if i == cur_end:
+                cur_end = cur_far
+                jumps += 1
+        return jumps
 
 sol = Solution()
 print(sol.jump([2,0,2,4,6,0,0,3]))#3

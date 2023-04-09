@@ -5,7 +5,7 @@ object OrderStatus extends Enumeration {
 }
 
 object AccountStatus {
- Active,Blocked,Banned,Compromised,Archived,Uknown
+ Active,Blocked,Banned,Compromised,Archived,Unknown
 }
 
 object ShippmentStatus {
@@ -16,7 +16,7 @@ object PaymentStatus {
    Unpaid, Pending,Completed,Failed,Decline,Canceled,Abandoned,Settled, Refunded
 }
 
-case class Account(user:String,pass:String,status: PaymentStatus,name:String,shippingAddress:Address,email:String,phone:String) {
+case class Account(user:String,pass:String,status: AccountStatus,name:String,shippingAddress:Address,email:String,phone:String) {
 
   val creditCards: List[CreditCard];
   val bankAccounts:List[ElectronicBankTransfer];
@@ -26,6 +26,7 @@ case class Account(user:String,pass:String,status: PaymentStatus,name:String,shi
   public def resetPassword():Boolean
  def addProductReview():Unit
  def addProduct():Unit
+ def getShippinAddress():Address
 }
 
 case class CreditCard(name:String,cardNum:Integer,code:Int,billingAddress:Address)
@@ -41,6 +42,7 @@ abstract class Customer{
   def removeItemFromCart(Item item):Boolean;
   def getShoppingCard():ShoppingCard
 }
+
 public class Guest extends Customer {
   def registerAccount():Boolean;
 }

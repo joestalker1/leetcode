@@ -1,28 +1,34 @@
-from collections import defaultdict
+from math import ceil
 
 class Solution:
     def convert(self, s, numRows):
-        if not s or not numRows:
+        if numRows == 1:
             return s
+        n = len(s)
+        sect = ceil(n / (2*numRows - 2.0))
+        num_cols = sect * (numRows - 1)
+        zigzag = [[0] * num_cols for _ in range(numRows)]
         r = 0
+        c = 0
         i = 0
-        m = defaultdict(list)
-        while i < len(s):
-            while r < numRows and i < len(s):
-                m[r].append(s[i])
+        while i < n:
+            while i < n and r < numRows:
+                zigzag[r][c] = s[i]
                 i += 1
                 r += 1
             r -= 2
-            while r > 0 and i < len(s):
-                m[r].append(s[i])
-                i += 1
+            c += 1
+            while i < n and r > 0 and c < num_cols:
+                zigzag[r][c] = s[i]
                 r -= 1
-            r = 0
-        res = ''
-        for i in range(numRows):
-            for j in range(len(m[i])):
-                res += m[i][j]
-        return res
+                c += 1
+                i += 1
+        res = []
+        for i in range(len(zigzag)):
+            for j in range(len(zigzag[0])):
+                if zigzag[i][j] != 0:
+                    res.append(zigzag[i][j])
+        return ''.join(res)
 
 
 sol = Solution()
